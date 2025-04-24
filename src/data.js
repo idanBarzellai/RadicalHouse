@@ -32,19 +32,64 @@ export const personas = [
 ];
 
 export const events = [
-    "תחרות 20 שאלות",
-    "נאומים נגד הייאוש",
-    "ערב בלי טלפונים",
-    "כיתת אמן עם אלכס פרפורי",
-    "הקרנת יום הזיכרון המשותף",
-    "הלייט נייט של ג'רמי פוגל",
-    "הפוליטיקה של האוכל",
-    "בלגן מפואר",
-    "אזור העניין",
-    "גם פרויד צריך טיפול",
-    "פסטיבל דוקאביב בבית רדיקל",
-    "דרישת שלום",
-    "מקום בלב & רדיקל חופשי",
-    "הפוליטיקה של האוכל בנוני ופורטונה",
-    "ערב שירה עם משוררים מקומיים"
+    {
+        title: "תחרות 20 שאלות",
+        description: "משחק טריוויה קבוצתי עם כתבים ורעיונות מעולמות שונים.",
+        image: "/images/events/quiz.jpg",
+        link: "https://radical.org.il/calendar/"
+    },
+    {
+        title: "נאומים נגד הייאוש",
+        description: "הקראת נאומים היסטוריים מעוררי השראה באווירה קהילתית.",
+        image: "/images/events/speeches.gif",
+        link: "https://radical.org.il/calendar/"
+    },
+    {
+        title: "ערב בלי טלפונים",
+        description: "ערב אינטימי ללא מסכים – רק שיחה, קשר וקהילה.",
+        image: "/images/events/no-phones.jpg",
+        link: "https://radical.org.il/calendar/"
+    },
+    {
+        title: "כיתת אמן עם אלכס פרפורי",
+        description: "סדנת יצירה עם אמן אורח מעורר השראה.",
+        image: "/images/events/masterclass.jpg",
+        link: "https://radical.org.il/calendar/"
+    },
+    {
+        title: "הקרנת יום הזיכרון המשותף",
+        description: "הקרנת סרטים ואירועים לזכר ישראלים ופלסטינים.",
+        image: "/images/events/memorial.png",
+        link: "https://radical.org.il/calendar/"
+    },
+    {
+        title: "הלייט נייט של ג'רמי פוגל",
+        description: "מופע פילוסופי-סטנדאפ עם המנחה ג'רמי פוגל.",
+        image: "/images/events/jeremy-night.png",
+        link: "https://radical.org.il/calendar/"
+    },
+    {
+        title: "בלגן מפואר",
+        description: "תערוכה או מרחב פתוח ליצירות ואומנות חתרנית.",
+        image: "/images/events/exhibit.jpg",
+        link: "https://radical.org.il/calendar/"
+    },
+    {
+        title: "אזור העניין",
+        description: "דיון, מיצג או הקרנה בנושא חברתי או תרבותי בוער.",
+        image: "/images/events/zone.jpg",
+        link: "https://radical.org.il/calendar/"
+    },
+    {
+        title: "גם פרויד צריך טיפול",
+        description: "מפגש על פסיכולוגיה, נפש, ועיבוד רגשי במציאות ישראלית.",
+        image: "/images/events/freud.jpg",
+        link: "https://radical.org.il/calendar/"
+    },
+    {
+        title: "הפוליטיקה של האוכל: פורטונה ובנוני",
+        description: "ערב עם שפים מקומיים על בישול כחלק מתרבות וזהות.",
+        image: "/images/events/food-bononi.png",
+        link: "https://radical.org.il/calendar/"
+    }
 ];

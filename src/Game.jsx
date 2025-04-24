@@ -3,30 +3,32 @@ import { events } from "./data";
 export default function Game({ player, event }) {
     const { isSpy, persona } = player;
 
+    if (isSpy) {
+        return (
+            <>
+                <p style={{ color: "red" }}><strong>את/ה המרגל/ית!</strong> נסה/י לנחש את האירוע.</p>
+                <ul>
+                    {events.map((e, i) => (
+                        <li key={i}>{e.title}</li>
+                    ))}
+                </ul>
+            </>
+        );
+    }
     return (
-        <div>
-            {!isSpy ? (
+        <>
+            <img src={persona.image} alt={persona.name} width="120" />
+            <h3>{persona.name}</h3>
+            <p>{persona.description}</p>
+            {!isSpy && event && (
                 <>
-                    <img src={persona.image} alt={persona.name} width="120" />
-                    <h4>{persona.name}</h4>
-                    <p>{persona.description}</p>
-                    <p><strong>האירוע:</strong> {event}</p>
-                </>
-            ) : (
-                <>
-                    <p style={{ color: "red" }}>
-                        <strong>את/ה המרגל/ית!</strong><br />
-                        נסה/י לגלות מה האירוע.
-                    </p>
                     <hr />
-                    <h4>רשימת כל האירועים האפשריים:</h4>
-                    <ul>
-                        {events.map((e, i) => (
-                            <li key={i}>{e}</li>
-                        ))}
-                    </ul>
+                    <h4>האירוע:</h4>
+                    <img src={event.image} alt={event.title} width="250" style={{ borderRadius: "8px" }} />
+                    <h5>{event.title}</h5>
+                    <p style={{ fontSize: "0.9rem", color: "#555" }}>{event.description}</p>
                 </>
             )}
-        </div>
+        </>
     );
 }

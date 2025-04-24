@@ -3,6 +3,7 @@ import { createRoom, joinRoom } from "./roomService";
 import { get, update, ref as dbRef, onValue } from "firebase/database";
 import { db } from "./firebase";
 import Game from "./Game";
+import EventCarousel from "./eventCarousel"
 
 export default function App() {
   const [roomCode, setRoomCode] = useState(null);
@@ -59,10 +60,66 @@ export default function App() {
 
   if (!roomCode || !roomData) {
     return (
-      <div style={{ padding: "2rem", direction: "rtl" }}>
-        <h1>RadicalHouse</h1>
-        <button onClick={handleCreateRoom}>צור חדר</button>
-        <button onClick={handleJoinRoom}>הצטרף לחדר</button>
+      <div style={{
+        minHeight: "100vh",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "2rem",
+        backgroundColor: "#f2f2f2",
+        direction: "rtl"
+      }}>
+        <div style={{
+          maxWidth: "400px",
+          width: "100%",
+          backgroundColor: "#fff",
+          padding: "2rem",
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          textAlign: "center"
+        }}>
+          <h1 style={{ color: "#111", fontSize: "1.75rem", marginBottom: "1rem" }}>
+            RadicalHouse
+          </h1>
+          <p style={{ color: "#333", fontSize: "1rem", marginBottom: "2rem" }}>
+            ברוכים הבאים למשחק חברתי באווירה קווירית 🎭
+          </p>
+          <button onClick={handleCreateRoom} style={{ marginBottom: "1rem" }}>
+            צור חדר
+          </button><br />
+          <button onClick={handleJoinRoom}>הצטרף לחדר</button>
+        </div>
+        {/* </div>
+      <div style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "start",
+        minHeight: "100vh",
+        backgroundColor: "#f7f7f7",
+        padding: "2rem",
+        direction: "rtl"
+      }}>
+        <div style={{
+          maxWidth: "600px",
+          width: "100%",
+          margin: "0 auto",           // 💥 הכי חשוב! זה מה שמרכז את הקופסה
+          backgroundColor: "#fff",
+          padding: "2rem",
+          borderRadius: "12px",
+          boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          textAlign: "right"
+        }}>
+          <h1 style={{ fontSize: "2rem", marginBottom: "1rem" }}>🎉 בית רדיקל</h1>
+          <p style={{ fontSize: "1rem", marginBottom: "2rem" }}>
+            הצטרפו למשחק או צרו חדר חדש
+          </p>
+          <p>היכנסו לחדר חדש או הצטרפו למשחק</p>
+          <button onClick={handleCreateRoom}>צור חדר</button>
+          <button onClick={handleJoinRoom}>הצטרף לחדר</button>
+        </div> */}
       </div>
     );
   }
@@ -70,44 +127,88 @@ export default function App() {
   const player = roomData.players.find(p => p.id === playerId);
 
   return (
-    <div style={{ padding: "2rem", direction: "rtl", textAlign: "right" }}>
-      <h2>קוד חדר: {roomCode}</h2>
+    <div style={{
+      display: "flex",
+      justifyContent: "center",
+      alignItems: "start",
+      minHeight: "100vh",
+      backgroundColor: "#f0f0f0",
+      padding: "2rem",
+      direction: "rtl"
+    }}>
+      <div style={{
+        maxWidth: "90vw",
+        width: "100%",
+        padding: "1.5rem",
+        backgroundColor: "#fff",
+        borderRadius: "12px",
+        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+        textAlign: "center",
+        direction: "rtl",
+        color: "#111"
+      }}>
 
-      {roomData.stage === "lobby" ? (
-        <>
-          <h3>שחקנים בחדר:</h3>
-          <ul>
-            {roomData.players.map(p => (
-              <li key={p.id}>{p.name}</li>
-            ))}
-          </ul>
-          {playerId === 1 && (
-            <button onClick={startGameForAll}>
-              התחל משחק
-            </button>
-          )}
-        </>
-      ) : (
-        <>
-          <Game player={player} event={roomData.event} />
-          <hr />
-          <h4>שחקנים בחדר:</h4>
-          <ul>
-            {roomData.players.map(p => (
-              <li
-                key={p.id}
-                style={{
-                  fontWeight: p.id === roomData.turnStarterId ? "bold" : "normal",
-                  color: p.id === roomData.turnStarterId ? "darkgreen" : "black"
-                }}
-              >
-                {p.name}
-                {p.id === roomData.turnStarterId && " ← מתחיל"}
-              </li>
-            ))}
-          </ul>
-        </>
-      )}
+        {roomData.stage === "lobby" ? (
+          <div style={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            textAlign: "center",
+            gap: "1.5rem",
+            maxWidth: "600px",
+            margin: "auto",
+            padding: "2rem"
+          }}>
+            <h2 style={{ color: "#111", fontWeight: "bold" }}>
+              חדר: {roomCode}
+            </h2>
+            <h3>שחקנים:</h3>
+            <ul style={{ listStyle: "none", padding: 0 }}>
+              {roomData.players.map(p => (
+                <li key={p.id} style={{ margin: "0.5rem 0" }}>{p.name}</li>
+              ))}
+            </ul>
+
+            {playerId === 1 && (
+              <button onClick={startGameForAll} style={{
+                padding: "0.75rem 1.5rem",
+                fontSize: "1rem",
+                borderRadius: "8px",
+                backgroundColor: "#222",
+                color: "#fff",
+                border: "none",
+                cursor: "pointer"
+              }}>
+                התחל משחק
+              </button>
+            )}
+
+            {/* קרוסלת האירועים */}
+            <EventCarousel />
+          </div>
+        ) : (
+          <>
+            <Game player={player} event={roomData.event} />
+            <hr />
+            <h4>שחקנים בחדר:</h4>
+            <ul>
+              {roomData.players.map(p => (
+                <li
+                  key={p.id}
+                  style={{
+                    fontWeight: p.id === roomData.turnStarterId ? "bold" : "normal",
+                    color: p.id === roomData.turnStarterId ? "darkgreen" : "black"
+                  }}
+                >
+                  {p.name}
+                  {p.id === roomData.turnStarterId && " ← מתחיל"}
+                </li>
+              ))}
+            </ul>
+          </>
+        )}
+      </div>
     </div>
   );
 }
