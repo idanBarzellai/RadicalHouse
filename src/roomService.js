@@ -2,9 +2,8 @@ import { db } from "./firebase";
 import { ref, get, set, update } from "firebase/database";
 import { personas, events } from "./data";
 
-function generateRoomCode(length = 5) {
-    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join('');
+function generateRoomCode() {
+    return Math.floor(1000 + Math.random() * 9000).toString(); // מספר בן 4 ספרות
 }
 
 export async function createRoom(playerName) {
