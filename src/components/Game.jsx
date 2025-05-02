@@ -2,16 +2,17 @@ import { useState } from "react";
 import SpyView from "./SpyView"
 import PlayerView from "./PlayerView"
 import LogoHeader from "./LogoHeader"
+import RoomCodeDisplay from "./RoomCodeDisplay";
 import './styles/Game.css'
 
-export default function Game({ player, event, players, turnStarterId }) {
+export default function Game({ player, event, players, turnStarterId, roomCode }) {
     const { isSpy, persona } = player;
     const [showDesc, setShowDesc] = useState(true);
 
     return (
         <div className="page-container">
             <LogoHeader />
-
+            <RoomCodeDisplay roomCode={roomCode} />
             {isSpy ? (
                 <SpyView />
             ) : (

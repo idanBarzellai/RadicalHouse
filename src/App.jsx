@@ -54,6 +54,7 @@ export default function App() {
           event={roomData.event}
           players={roomData.players}
           turnStarterId={roomData.turnStarterId}
+          roomCode={roomCode}
         />
       )}
     </div>

@@ -1,0 +1,26 @@
+.room-code-display {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.25rem;
+    margin: 1rem 0;
+    text-align: center;
+}
+
+.copy-room-code {
+    background: none;
+    border: none;
+    font-size: 1.1rem;
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s ease;
+}
+
+.copy-room-code:hover {
+    color: #222;
+}
+
+.copied-label {
+    font-size: 0.9rem;
+    color: green;
+}

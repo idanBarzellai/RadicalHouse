@@ -1,11 +1,12 @@
 import EventCarousel from "./EventCarousel";
 import LogoHeader from "./LogoHeader";
+import RoomCodeDisplay from "./RoomCodeDisplay";
 import "./styles/LobbyScreen.css"
 export default function LobbyScreen({ roomCode, players, playerId, onStartGame }) {
     return (
         <div className="page-container">
             <LogoHeader />
-            <h2 className="lobby-title">קוד חדר: {roomCode}</h2>
+            <RoomCodeDisplay roomCode={roomCode} />
 
             <h3 className="players-label">שחקנים בחדר</h3>
             <ul className="players-list">
