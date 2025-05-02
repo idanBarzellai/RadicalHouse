@@ -1,12 +1,10 @@
 import { useState, useEffect } from "react";
 import { update, ref as dbRef, onValue } from "firebase/database";
 import { db } from "./firebase";
-import Game from "./Game";
-import EventCarousel from "./EventCarousel"
-import PageContainer from "./PageContainer";
-import LobbyScreen from "./LobbyScreen";
-import GameScreen from "./GameScreen";
-import SplashScreen from "./SplashScreen";
+import LobbyScreen from "./components/LobbyScreen";
+import Game from "./components/Game";
+import SplashScreen from "./components/SplashScreen";
+import './index.css';
 
 export default function App() {
   const [roomCode, setRoomCode] = useState(null);
@@ -42,7 +40,7 @@ export default function App() {
   const player = roomData.players.find(p => p.id === playerId);
 
   return (
-    <PageContainer>
+    <div >
       {roomData.stage === "lobby" ? (
         <LobbyScreen
           roomCode={roomCode}
@@ -51,13 +49,13 @@ export default function App() {
           onStartGame={startGameForAll}
         />
       ) : (
-        <GameScreen
+        <Game
           player={player}
           event={roomData.event}
           players={roomData.players}
           turnStarterId={roomData.turnStarterId}
         />
       )}
-    </PageContainer>
+    </div>
   );
 }

@@ -1,31 +1,7 @@
 import { useState } from "react";
-import { createRoom, joinRoom } from "./roomService";
-
-// // סגנונות משותפים
-// const inputStyle = {
-//     border: "none",
-//     borderBottom: "1px solid #aaa",
-//     padding: "0.5rem",
-//     width: "100%",
-//     marginBottom: "2rem",
-//     textAlign: "center",
-//     fontSize: "1rem",
-//     outline: "none"
-// };
-
-// const buttonBaseStyle = {
-//     width: "100%",
-//     padding: "0.75rem",
-//     borderRadius: "20px",
-//     fontSize: "1rem",
-//     fontWeight: "bold",
-//     cursor: "pointer",
-//     marginBottom: "1rem",
-//     backgroundColor: "#fff",
-//     color: "#222",
-//     border: "1px solid #ccc"
-// };
-
+import { createRoom, joinRoom } from "../roomService";
+import LogoHeader from "./LogoHeader";
+import "./styles/SplashScreen.css"
 export default function SplashScreen({ onJoin }) {
     const [playerName, setPlayerName] = useState("");
     const [roomCode] = useState("");
@@ -49,11 +25,7 @@ export default function SplashScreen({ onJoin }) {
 
     return (
         <div className="page-container">
-            {/* לוגו וכותרת */}
-            <div className="logo-block">
-                <div className="logo-circle" />
-                <div className="logo-title">Radicalecture</div>
-            </div>
+            <LogoHeader />
 
             {/* טקסט פתיחה */}
             <div className="screen-heading">
@@ -77,14 +49,14 @@ export default function SplashScreen({ onJoin }) {
             <button className="button-rounded"
                 onClick={handleCreateRoom}
             >
-                🎉 התחל משחק חדש
+                התחל משחק חדש
             </button>
 
             {/* כפתור הצטרפות */}
             <button className="button-rounded"
                 onClick={handleJoinRoom}
             >
-                🚪 הצטרף לקבוצה
+                הצטרף לקבוצה
             </button>
         </div>
     );

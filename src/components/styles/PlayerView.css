@@ -1,0 +1,66 @@
+/* Persona */
+.persona-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    text-align: right;
+}
+
+.persona-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+}
+
+.persona-text {
+    flex: 1;
+}
+
+.toggle-desc {
+    font-size: 0.8rem;
+    margin: 0.5rem 0;
+    background: none;
+    border: none;
+    color: #213547;
+    cursor: pointer;
+    text-decoration: underline;
+}
+
+.persona-description {
+    font-size: 0.9rem;
+    color: #555;
+}
+
+/* אירוע */
+.event-block {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    text-align: right;
+}
+
+.event-image {
+    width: 80px;
+    border-radius: 8px;
+    flex-shrink: 0;
+    object-fit: cover;
+}
+
+.event-text {
+    flex: 1;
+}
+
+.event-title {
+    margin: 0;
+    font-size: 1rem;
+    color: #222;
+}
+
+.event-description {
+    font-size: 0.85rem;
+    color: #555;
+}

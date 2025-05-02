@@ -1,0 +1,34 @@
+/* Game screen */
+.game-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.game-players {
+    text-align: right;
+}
+
+.players-label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    color: #333;
+}
+
+.players-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.player-name {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #222;
+}
+
+.player-name.current-turn {
+    font-weight: bold;
+    color: darkgreen;
+}

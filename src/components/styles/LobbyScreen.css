@@ -1,0 +1,25 @@
+.lobby-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    color: #213547;
+}
+
+.players-label {
+    font-size: 1rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    color: #333;
+}
+
+.players-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 1.5rem 0;
+}
+
+.player-name {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #222;
+}

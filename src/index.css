@@ -14,7 +14,7 @@ body {
   min-width: 320px;
   min-height: 100vh;
   direction: rtl;
-  background-color: #f6f1ec;
+  background-color: #ffffff;
 }
 
 /* קופסת הדף */
@@ -25,7 +25,7 @@ body {
   align-items: center;
   width: 100%;
   max-width: 500px;
-  background-color: #fff;
+  background-color: #f6f1ec;
   padding: 2rem;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
@@ -34,41 +34,7 @@ body {
   text-align: center;
 }
 
-/* לוגו קטן עגול */
-.logo-circle {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 2px solid #222;
-  margin: 0 auto 0.5rem;
-}
 
-/* טקסט כותרת ליד הלוגו */
-.logo-title {
-  font-weight: bold;
-  font-size: 1rem;
-  color: #222;
-}
-
-.logo-block {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.logo-circle {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  border: 2px solid #555;
-  margin: 0 auto 0.5rem;
-}
-
-.logo-title {
-  font-weight: bold;
-  font-size: 1rem;
-  color: #333;
-  text-align: center;
-}
 
 .screen-heading {
   text-align: center;
@@ -87,26 +53,6 @@ body {
   margin-top: 1rem;
 }
 
-/* קלט */
-.text-input {
-  border: none;
-  border-bottom: 2px solid #222;
-  padding: 0.5rem;
-  width: 100%;
-  font-size: 1rem;
-  margin-bottom: 2rem;
-  text-align: center;
-  background-color: transparent;
-  outline: none;
-  font-family: inherit;
-}
-
-/* כותרת לקלט (כמו "הכניסו את שמכם") */
-.input-label {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
-  color: #213547;
-}
 
 /* כפתורים */
 .button-rounded {
@@ -126,3 +72,7 @@ body {
 .button-rounded:hover {
   background-color: #d6d1cb;
 }
+
+
+
+

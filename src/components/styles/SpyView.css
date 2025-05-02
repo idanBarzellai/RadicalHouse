@@ -1,0 +1,31 @@
+/* Spy view */
+.spy-view {
+    text-align: right;
+    margin-bottom: 2rem;
+}
+
+.spy-title {
+    color: #b80000;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.spy-instruction {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.spy-event-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.spy-event-item {
+    font-size: 0.95rem;
+    color: #444;
+    margin-bottom: 0.4rem;
+}
