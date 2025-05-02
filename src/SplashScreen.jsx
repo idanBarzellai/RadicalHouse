@@ -1,10 +1,34 @@
 import { useState } from "react";
-import PageContainer from "./PageContainer";
 import { createRoom, joinRoom } from "./roomService";
+
+// // סגנונות משותפים
+// const inputStyle = {
+//     border: "none",
+//     borderBottom: "1px solid #aaa",
+//     padding: "0.5rem",
+//     width: "100%",
+//     marginBottom: "2rem",
+//     textAlign: "center",
+//     fontSize: "1rem",
+//     outline: "none"
+// };
+
+// const buttonBaseStyle = {
+//     width: "100%",
+//     padding: "0.75rem",
+//     borderRadius: "20px",
+//     fontSize: "1rem",
+//     fontWeight: "bold",
+//     cursor: "pointer",
+//     marginBottom: "1rem",
+//     backgroundColor: "#fff",
+//     color: "#222",
+//     border: "1px solid #ccc"
+// };
 
 export default function SplashScreen({ onJoin }) {
     const [playerName, setPlayerName] = useState("");
-    const [roomCode, setRoomCode] = useState("");
+    const [roomCode] = useState("");
 
     const handleCreateRoom = async () => {
         if (!playerName) return alert("נא להזין שם שחקן");
@@ -23,63 +47,45 @@ export default function SplashScreen({ onJoin }) {
         }
     };
 
-    const inputStyle = {
-        padding: "0.5rem",
-        width: "100%",
-        marginBottom: "1rem",
-        borderRadius: "8px",
-        border: "1px solid #ccc"
-    };
-
-    const buttonStyle = {
-        width: "100%",
-        padding: "0.75rem",
-        borderRadius: "8px",
-        color: "#fff",
-        border: "none",
-        fontWeight: "bold",
-        marginBottom: "1rem",
-        cursor: "pointer"
-    };
-
     return (
-        <PageContainer>
-            <h1 style={{ fontSize: "1.8rem", marginBottom: "0.5rem" }}>מופנם רדיקלי</h1>
-            <p style={{ marginBottom: "1.5rem", fontSize: "1rem", color: "#444" }}>
-                משחק חשדנות באווירה קהילתית-מופנמת 🎭🌒
-            </p>
+        <div className="page-container">
+            {/* לוגו וכותרת */}
+            <div className="logo-block">
+                <div className="logo-circle" />
+                <div className="logo-title">Radicalecture</div>
+            </div>
 
-            <input
+            {/* טקסט פתיחה */}
+            <div className="screen-heading">
+                <p><strong>ברוכים הבאים לספיי־רדיקל!</strong></p>
+                <p>
+                    גלו דמויות מהקהילה, גלו את האירועים בבית רדיקל,<br />
+                    ונסו לחשוף – מי ביניכם הוא המרגל שלא יודע היכן הוא נמצא?
+                </p>
+                <p className="screen-sub">האם תצליחו לגלות אותו?</p>
+            </div>
+
+            {/* שורת שם שחקן */}
+            <input className="text-input"
                 type="text"
-                placeholder="הכנס/י שם"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
-                style={inputStyle}
+                placeholder="שם שחקן"
             />
 
-            <button
+            {/* כפתור יצירת חדר */}
+            <button className="button-rounded"
                 onClick={handleCreateRoom}
-                style={{ ...buttonStyle, backgroundColor: "#222" }}
             >
-                🎉 צור חדר חדש
+                🎉 התחל משחק חדש
             </button>
 
-            <input
-                type="text"
-                placeholder="קוד חדר (4 ספרות)"
-                value={roomCode}
-                onChange={(e) => setRoomCode(e.target.value)}
-                maxLength={4}
-                inputMode="numeric"
-                style={inputStyle}
-            />
-
-            <button
+            {/* כפתור הצטרפות */}
+            <button className="button-rounded"
                 onClick={handleJoinRoom}
-                style={{ ...buttonStyle, backgroundColor: "#444" }}
             >
-                🚪 הצטרף לחדר קיים
+                🚪 הצטרף לקבוצה
             </button>
-        </PageContainer>
+        </div>
     );
 }
