@@ -27,7 +27,7 @@ export default function PlayerView({ persona, event, showDesc, toggleDesc }) {
                         className="event-image"
                     />
                     <div className="event-text">
-                        <h4 className="event-title">{event.title}</h4>
+                        <h4 className="event-title">האירוע - {event.title}</h4>
                         <p className="event-description">{event.description}</p>
                     </div>
                 </div>
