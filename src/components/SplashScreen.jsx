@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { createRoom, joinRoom } from "../roomService";
 import LogoHeader from "./LogoHeader";
-import "./styles/SplashScreen.css"
+import "./styles/SplashScreen.css";
+
 export default function SplashScreen({ onJoin }) {
     const [playerName, setPlayerName] = useState("");
-    const [roomCode] = useState("");
+    const [roomCode, setRoomCode] = useState("");
 
     const handleCreateRoom = async () => {
         if (!playerName) return alert("נא להזין שם שחקן");
@@ -38,24 +39,30 @@ export default function SplashScreen({ onJoin }) {
             </div>
 
             {/* שורת שם שחקן */}
-            <input className="text-input"
+            <input
+                className="text-input"
                 type="text"
                 value={playerName}
                 onChange={(e) => setPlayerName(e.target.value)}
                 placeholder="שם שחקן"
             />
 
+            {/* שורת קוד חדר */}
+            <input
+                className="text-input"
+                type="text"
+                value={roomCode}
+                onChange={(e) => setRoomCode(e.target.value)}
+                placeholder="קוד חדר (אם קיים)"
+            />
+
             {/* כפתור יצירת חדר */}
-            <button className="button-rounded"
-                onClick={handleCreateRoom}
-            >
+            <button className="button-rounded" onClick={handleCreateRoom}>
                 התחל משחק חדש
             </button>
 
             {/* כפתור הצטרפות */}
-            <button className="button-rounded"
-                onClick={handleJoinRoom}
-            >
+            <button className="button-rounded" onClick={handleJoinRoom}>
                 הצטרף לקבוצה
             </button>
         </div>
