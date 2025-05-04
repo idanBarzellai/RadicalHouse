@@ -27,7 +27,6 @@ export default function SplashScreen({ onJoin }) {
     return (
         <div className="page-container">
             <LogoHeader />
-
             {/* טקסט פתיחה */}
             <div className="screen-heading">
                 <p><strong>ברוכים הבאים לספיי־רדיקל!</strong></p>
