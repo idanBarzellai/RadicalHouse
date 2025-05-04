@@ -14,7 +14,18 @@ export default function App() {
   const startGameForAll = async () => {
     const refPath = dbRef(db, `rooms/${roomCode}`);
     const starterId = Math.floor(Math.random() * roomData.players.length) + 1;
-    await update(refPath, { stage: "game", turnStarterId: starterId });
+
+    const playerCount = roomData.players.length;
+    const durationSeconds = playerCount * 2 * 60;
+    const startTimestamp = Date.now();
+    const endTimestamp = startTimestamp + durationSeconds * 1000;
+
+    await update(refPath, {
+      stage: "game",
+      turnStarterId: starterId,
+      startTimestamp,
+      endTimestamp,
+    });
   };
 
   // מאזין לשינויים בחדר
@@ -51,9 +62,7 @@ export default function App() {
       ) : (
         <Game
           player={player}
-          event={roomData.event}
-          players={roomData.players}
-          turnStarterId={roomData.turnStarterId}
+          roomData={roomData}
           roomCode={roomCode}
         />
       )}

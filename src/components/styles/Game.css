@@ -9,6 +9,16 @@
     text-align: right;
 }
 
+.game-timer {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #b80000;
+    margin: 1rem 0;
+    background-color: #f0e6e6;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+}
+
 .players-label {
     font-size: 1.1rem;
     font-weight: bold;
