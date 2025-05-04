@@ -13,16 +13,24 @@ export default function App() {
 
   const startGameForAll = async () => {
     const refPath = dbRef(db, `rooms/${roomCode}`);
-    const starterId = Math.floor(Math.random() * roomData.players.length) + 1;
+    const players = roomData.players;
 
-    const playerCount = roomData.players.length;
-    const durationSeconds = playerCount * 2 * 60;
+    // בחר מרגל אקראי
+    const spyPlayer = players[Math.floor(Math.random() * players.length)];
+    const spyId = spyPlayer.id
+
+    // גם מי יתחיל את הסבב (שומר בקוד שלך)
+    const starterId = Math.floor(Math.random() * players.length) + 1;
+
+    // חישוב זמן התחלה וסיום
+    const durationSeconds = players.length * 2; // Change to  * 60
     const startTimestamp = Date.now();
     const endTimestamp = startTimestamp + durationSeconds * 1000;
 
     await update(refPath, {
       stage: "game",
       turnStarterId: starterId,
+      spyId,
       startTimestamp,
       endTimestamp,
     });
