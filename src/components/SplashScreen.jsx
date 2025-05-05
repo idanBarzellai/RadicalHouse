@@ -5,7 +5,8 @@ import "./styles/SplashScreen.css";
 
 export default function SplashScreen({ onJoin }) {
     const [playerName, setPlayerName] = useState("");
-    const [roomCode, setRoomCode] = useState("");
+    const [showJoinModal, setShowJoinModal] = useState(false);
+    const [joinCode, setJoinCode] = useState("");
 
     const handleCreateRoom = async () => {
         if (!playerName) return alert("נא להזין שם שחקן");
@@ -13,11 +14,11 @@ export default function SplashScreen({ onJoin }) {
         onJoin({ roomCode, playerId });
     };
 
-    const handleJoinRoom = async () => {
-        if (!playerName || !roomCode) return alert("נא למלא שם וקוד חדר");
+    const handleConfirmJoin = async () => {
+        if (!playerName || !joinCode) return alert("נא למלא שם וקוד חדר");
         try {
-            const { playerId } = await joinRoom(roomCode, playerName);
-            onJoin({ roomCode, playerId });
+            const { playerId } = await joinRoom(joinCode, playerName);
+            onJoin({ roomCode: joinCode, playerId });
         } catch (err) {
             if (err.message === "ROOM_FULL") {
                 alert("החדר מלא, לא ניתן להצטרף עוד.");
@@ -29,45 +30,59 @@ export default function SplashScreen({ onJoin }) {
     };
 
     return (
-        <div className="page-container">
-            <LogoHeader />
-            {/* טקסט פתיחה */}
-            <div className="screen-heading">
-                <p><strong>ברוכים הבאים לספיי־רדיקל!</strong></p>
-                <p>
-                    גלו דמויות מהקהילה, גלו את האירועים בבית רדיקל,<br />
-                    ונסו לחשוף – מי ביניכם הוא המרגל שלא יודע היכן הוא נמצא?
-                </p>
-                <p className="screen-sub">האם תצליחו לגלות אותו?</p>
+        <>
+            <div className="page-container">
+                <LogoHeader />
+
+                <div className="screen-heading">
+                    <p><strong>ברוכים הבאים לספיי־רדיקל!</strong></p>
+                    <p>
+                        גלו דמויות מהקהילה, גלו את האירועים בבית רדיקל,<br />
+                        ונסו לחשוף – מי ביניכם הוא המרגל שלא יודע היכן הוא נמצא?
+                    </p>
+                    <p className="screen-sub">האם תצליחו לגלות אותו?</p>
+                </div>
+
+                <input
+                    className="text-input"
+                    type="text"
+                    value={playerName}
+                    onChange={e => setPlayerName(e.target.value)}
+                    placeholder="שם שחקן"
+                />
+
+                <button className="button-rounded" onClick={handleCreateRoom}>
+                    התחל משחק חדש
+                </button>
+                <button
+                    className="button-rounded"
+                    onClick={() => setShowJoinModal(true)}
+                >
+                    הצטרף לקבוצה
+                </button>
             </div>
 
-            {/* שורת שם שחקן */}
-            <input
-                className="text-input"
-                type="text"
-                value={playerName}
-                onChange={(e) => setPlayerName(e.target.value)}
-                placeholder="שם שחקן"
-            />
-
-            {/* שורת קוד חדר */}
-            <input
-                className="text-input"
-                type="text"
-                value={roomCode}
-                onChange={(e) => setRoomCode(e.target.value)}
-                placeholder="קוד חדר (אם קיים)"
-            />
-
-            {/* כפתור יצירת חדר */}
-            <button className="button-rounded" onClick={handleCreateRoom}>
-                התחל משחק חדש
-            </button>
-
-            {/* כפתור הצטרפות */}
-            <button className="button-rounded" onClick={handleJoinRoom}>
-                הצטרף לקבוצה
-            </button>
-        </div>
+            {showJoinModal && (
+                <div className="modal-overlay" onClick={() => setShowJoinModal(false)}>
+                    <div className="modal-content" onClick={e => e.stopPropagation()}>
+                        <input
+                            className="modal-input"
+                            type="text"
+                            value={joinCode}
+                            onChange={e => setJoinCode(e.target.value)}
+                            placeholder="הכנס קוד חדר (4 ספרות)"
+                        />
+                        <div className="modal-buttons">
+                            <button
+                                className="button-rounded"
+                                onClick={handleConfirmJoin}
+                            >
+                                אישור
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
+        </>
     );
 }
