@@ -19,8 +19,12 @@ export default function SplashScreen({ onJoin }) {
             const { playerId } = await joinRoom(roomCode, playerName);
             onJoin({ roomCode, playerId });
         } catch (err) {
-            alert("החדר לא קיים");
-            console.error(err);
+            if (err.message === "ROOM_FULL") {
+                alert("החדר מלא, לא ניתן להצטרף עוד.");
+            } else {
+                alert("שגיאה בכניסה לחדר.");
+                console.error(err);
+            }
         }
     };
 

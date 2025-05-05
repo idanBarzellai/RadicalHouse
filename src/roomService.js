@@ -3,49 +3,70 @@ import { ref, get, set, update } from "firebase/database";
 import { personas, events } from "./data";
 
 function generateRoomCode() {
-    return Math.floor(1000 + Math.random() * 9000).toString(); // מספר בן 4 ספרות
+    return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
 export async function createRoom(playerName) {
     const roomCode = generateRoomCode();
-    const spyIndex = 0;
-    const event = events[Math.floor(Math.random() * events.length)];
 
+    // ערבוב רשימת הפרסונות
     const shuffledPersonas = [...personas].sort(() => 0.5 - Math.random());
+
+    // מיקום אקראי של המרגל ברשימה (id = spyIndex + 1)
+    const spyIndex = Math.floor(Math.random() * shuffledPersonas.length);
+
+    // בונים את השחקן הראשון
+    const firstId = 1;
+    const firstIsSpy = spyIndex === (firstId - 1);
+    const firstPersona = firstIsSpy ? null : shuffledPersonas[firstId - 1];
 
     const players = [
         {
-            id: 1,
+            id: firstId,
             name: playerName,
-            isSpy: spyIndex === 0,
-            persona: spyIndex === 0 ? null : shuffledPersonas[0]
+            isSpy: firstIsSpy,
+            persona: firstPersona
         }
     ];
 
     const roomData = {
-        event,
+        shuffledPersonas,
+        spyIndex,
+        event: events[Math.floor(Math.random() * events.length)],
         stage: "lobby",
         players,
-        turnStarterId: 1 // נתחיל משחקן 1 רנדומלי בשלב הבא
+        turnStarterId: null,
+        startTimestamp: null,
+        endTimestamp: null
     };
 
     await set(ref(db, `rooms/${roomCode}`), roomData);
-
-    return { roomCode, playerId: 1 };
+    return { roomCode, playerId: firstId };
 }
+
 export async function joinRoom(roomCode, playerName) {
     const roomRef = ref(db, `rooms/${roomCode}`);
     const snapshot = await get(roomRef);
 
     if (!snapshot.exists()) {
-        throw new Error("החדר לא קיים");
+        throw new Error("ROOM_NOT_FOUND");
     }
 
     const room = snapshot.val();
-    const playerId = room.players.length + 1;
+    const currentPlayers = room.players || [];
+    const count = currentPlayers.length;
 
-    const isSpy = room.players.some(p => p.isSpy) ? false : true; // רק שחקן אחד יהיה מרגל
-    const persona = isSpy ? null : personas[Math.floor(Math.random() * personas.length)];
+    if (count >= 6) {
+        throw new Error("ROOM_FULL");
+    }
+
+    const playerId = count + 1;
+    const { shuffledPersonas, spyIndex } = room;
+
+    // קביעת האם המרגל לפי ה־spyIndex שהוגדר ב־createRoom
+    const isSpy = spyIndex === (playerId - 1);
+    // לכל שחקן שאינו המרגל נותנים את הפרסונה המתאימה מתוך shuffledPersonas
+    const persona = isSpy ? null : shuffledPersonas[playerId - 1];
 
     const newPlayer = {
         id: playerId,
@@ -54,9 +75,8 @@ export async function joinRoom(roomCode, playerName) {
         persona
     };
 
-    const updatedPlayers = [...room.players, newPlayer];
-
+    const updatedPlayers = [...currentPlayers, newPlayer];
     await update(roomRef, { players: updatedPlayers });
 
-    return { playerId };
+    return { roomCode, playerId };
 }

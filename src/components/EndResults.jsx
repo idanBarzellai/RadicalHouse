@@ -1,21 +1,29 @@
 import React from "react";
 
 export default function EndResults({ player, roomData }) {
-    const { isSpy } = player;
-    const { spyGuess, votes, players, event } = roomData;
+    const { spyGuess, votes = {}, players, event, spyId } = roomData;
+    const isSpy = player.id === spyId;
 
-    const totalVotes = Object.values(votes || {}).reduce((acc, id) => {
-        acc[id] = (acc[id] || 0) + 1;
+    // סופרים קולות לכל שחקן
+    const voteCounts = players.reduce((acc, p) => {
+        acc[p.id] = 0;
         return acc;
     }, {});
+    Object.values(votes).forEach(votedId => {
+        if (voteCounts[votedId] !== undefined) {
+            voteCounts[votedId] += 1;
+        }
+    });
 
-    const votedOutId = Object.keys(totalVotes).reduce((a, b) =>
-        totalVotes[a] > totalVotes[b] ? a : b
-    );
+    // כמה שחקנים (הצבעות אפשריות) לא המרגל
+    const nonSpyCount = players.filter(p => p.id !== spyId).length;
+    const spyVotes = voteCounts[spyId] || 0;
 
-    const isSpyCaught = parseInt(votedOutId, 10) === roomData.spyId;
+    // רוב: יותר מחצי מההצבעות של ה-non-spy
+    const isSpyCaught = spyVotes > (nonSpyCount / 2);
     const isGuessCorrect = spyGuess === event.title;
 
+    // בניית הודעת תוצאה
     let resultMessage = "";
     if (isSpy) {
         if (isGuessCorrect && !isSpyCaught) {
@@ -44,17 +52,13 @@ export default function EndResults({ player, roomData }) {
             <h3>הניחוש של המרגל:</h3>
             <p>{spyGuess || "המרגל לא ניחש"}</p>
 
-            <h3>מי הצביע על מי:</h3>
+            <h3>מספר קולות נגד כל שחקן:</h3>
             <ul>
-                {Object.entries(votes || {}).map(([voterId, suspectId]) => {
-                    const voter = players.find(p => p.id === parseInt(voterId));
-                    const suspect = players.find(p => p.id === parseInt(suspectId));
-                    return (
-                        <li key={voterId}>
-                            {voter?.name} → {suspect?.name || "(לא ידוע)"}
-                        </li>
-                    );
-                })}
+                {players.map(p => (
+                    <li key={p.id}>
+                        {p.name} – הצביעו {voteCounts[p.id] || 0} אנשים
+                    </li>
+                ))}
             </ul>
         </div>
     );

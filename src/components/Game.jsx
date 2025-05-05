@@ -12,7 +12,7 @@ import "./styles/Game.css";
 
 export default function Game({ player, roomData, roomCode }) {
     const isSpy = player.id === roomData.spyId;
-    const persona = player.persona; 
+    const persona = player.persona;
     const [showDesc, setShowDesc] = useState(true);
     const [timeLeft, setTimeLeft] = useState(null);
     const [hasVoted, setHasVoted] = useState(false);
@@ -97,7 +97,7 @@ export default function Game({ player, roomData, roomCode }) {
             <RoomCodeDisplay roomCode={roomCode} />
             {isSpy
                 ? <SpyView />
-                : <PlayerView
+                : persona && <PlayerView
                     persona={persona}
                     event={roomData.event}
                     showDesc={showDesc}

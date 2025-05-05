@@ -71,6 +71,8 @@ body {
   background-color: #d6d1cb;
 }
 
-
-
-
+.button-rounded[disabled] {
+  background-color: #ddd;
+  color: #888;
+  border-color: #ccc;
+}
