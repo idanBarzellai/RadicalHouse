@@ -14,6 +14,7 @@ export async function createRoom(playerName) {
 
     // מיקום אקראי של המרגל ברשימה (id = spyIndex + 1)
     const spyIndex = Math.floor(Math.random() * shuffledPersonas.length);
+    console.log("spy index " + spyIndex);
 
     // בונים את השחקן הראשון
     const firstId = 1;
@@ -53,9 +54,14 @@ export async function joinRoom(roomCode, playerName) {
     }
 
     const room = snapshot.val();
+    // 🚫 lock out mid-game
+    if (room.stage === "game" || room.stage === "vote") {
+        throw new Error("GAME_IN_PROGRESS");
+    }
+
     const currentPlayers = room.players || [];
     const count = currentPlayers.length;
-
+    // 🚫 enforce max 6
     if (count >= 6) {
         throw new Error("ROOM_FULL");
     }
@@ -79,4 +85,12 @@ export async function joinRoom(roomCode, playerName) {
     await update(roomRef, { players: updatedPlayers });
 
     return { roomCode, playerId };
+}
+
+export async function leaveRoom(roomCode, playerId) {
+    const roomRef = ref(db, `rooms/${roomCode}`);
+    const snap = await get(roomRef);
+    if (!snap.exists()) throw new Error("ROOM_NOT_FOUND");
+    const players = snap.val().players.filter(p => p.id !== playerId);
+    await update(roomRef, { players });
 }

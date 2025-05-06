@@ -1,9 +1,9 @@
 import { useState, useEffect } from "react";
 import { update, ref as dbRef, onValue } from "firebase/database";
 import { db } from "./firebase";
-import LobbyScreen from "./components/LobbyScreen";
-import Game from "./components/Game";
-import SplashScreen from "./components/SplashScreen";
+import LobbyScreen from "./gameStates/LobbyScreen";
+import Game from "./gameStates/Game";
+import SplashScreen from "./gameStates/SplashScreen";
 import './index.css';
 
 export default function App() {
@@ -46,6 +46,14 @@ export default function App() {
     return () => unsubscribe();
   }, [roomCode]);
 
+  useEffect(() => {
+    if (!roomData) return;
+    // masterId===1; if no player with id=1, master left
+    if (!roomData.players?.some(p => p.id === 1)) {
+      setRoomCode(null);
+      setRoomData(null);
+    }
+  }, [roomData]);
 
   if (!roomCode || !roomData) {
     return (
@@ -56,7 +64,7 @@ export default function App() {
     );
   }
 
-  const player = roomData.players.find(p => p.id === playerId);
+  // const player = roomData.players.find(p => p.id === playerId);
 
   return (
     <div >
@@ -66,12 +74,20 @@ export default function App() {
           players={roomData.players}
           playerId={playerId}
           onStartGame={startGameForAll}
+          onExit={() => {
+            setRoomCode(null);
+            setRoomData(null);
+          }}
         />
       ) : (
         <Game
-          player={player}
+          playerId={playerId}
           roomData={roomData}
           roomCode={roomCode}
+          onExit={() => {
+            setRoomCode(null);
+            setRoomData(null);
+          }}
         />
       )}
     </div>

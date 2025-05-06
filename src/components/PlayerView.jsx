@@ -1,5 +1,6 @@
 import "./styles/PlayerView.css"
 export default function PlayerView({ persona, event, showDesc, toggleDesc }) {
+    if (!persona) return <p>טוען פרסונה…</p>;
     return (
         <>
             <div className="persona-block">

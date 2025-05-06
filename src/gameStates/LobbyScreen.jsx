@@ -1,8 +1,9 @@
-import EventCarousel from "./EventCarousel";
-import LogoHeader from "./LogoHeader";
-import RoomCodeDisplay from "./RoomCodeDisplay";
+import EventCarousel from "../components/EventCarousel";
+import LogoHeader from "../components/LogoHeader";
+import RoomCodeDisplay from "../components/RoomCodeDisplay";
+import { leaveRoom } from "../roomService";
 import "./styles/LobbyScreen.css"
-export default function LobbyScreen({ roomCode, players, playerId, onStartGame }) {
+export default function LobbyScreen({ roomCode, players = [], playerId, onStartGame, onExit }) {
     const isMaster = playerId === 1;
     const count = players.length;
     const canStart = count >= 3 && count <= 6;
@@ -31,6 +32,17 @@ export default function LobbyScreen({ roomCode, players, playerId, onStartGame }
                     התחל משחק
                 </button>
             )}
+            {/* leave room */}
+            <button
+                className="button-rounded"
+                onClick={async () => {
+                    await leaveRoom(roomCode, playerId);
+                    onExit();
+                }}
+                style={{ marginTop: "1rem", backgroundColor: "#f66", color: "#fff" }}
+            >
+                עזיבת החדר
+            </button>
 
             {!roomFull
                 ? <EventCarousel />

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { createRoom, joinRoom } from "../roomService";
-import LogoHeader from "./LogoHeader";
+import LogoHeader from "../components/LogoHeader";
 import "./styles/SplashScreen.css";
 
 export default function SplashScreen({ onJoin }) {
@@ -22,7 +22,10 @@ export default function SplashScreen({ onJoin }) {
         } catch (err) {
             if (err.message === "ROOM_FULL") {
                 alert("החדר מלא, לא ניתן להצטרף עוד.");
-            } else {
+            } else if (err.message === "GAME_IN_PROGRESS") {
+                alert("המשחק כבר התחיל, לא ניתן להצטרף.");
+            }
+            else {
                 alert("שגיאה בכניסה לחדר.");
                 console.error(err);
             }
