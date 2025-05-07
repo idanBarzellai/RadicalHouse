@@ -55,11 +55,15 @@ export async function joinRoom(roomCode, playerName) {
 
     const room = snapshot.val();
     // 🚫 lock out mid-game
-    if (room.stage === "game" || room.stage === "vote") {
+    if (["game", "vote", "spyGuess"].includes(room.stage)) {
         throw new Error("GAME_IN_PROGRESS");
     }
 
-    const currentPlayers = room.players || [];
+    // normalize players in DB → dense array
+    const raw = room.players || [];
+    const arr = Array.isArray(raw) ? raw : Object.values(raw);
+    const currentPlayers = arr.filter(p => p != null);
+
     const count = currentPlayers.length;
     // 🚫 enforce max 6
     if (count >= 6) {
@@ -72,7 +76,10 @@ export async function joinRoom(roomCode, playerName) {
     // קביעת האם המרגל לפי ה־spyIndex שהוגדר ב־createRoom
     const isSpy = spyIndex === (playerId - 1);
     // לכל שחקן שאינו המרגל נותנים את הפרסונה המתאימה מתוך shuffledPersonas
-    const persona = isSpy ? null : shuffledPersonas[playerId - 1];
+    // assign persona or null (never undefined)
+    const persona = isSpy
+        ? null
+        : (shuffledPersonas[playerId - 1] ?? null);
 
     const newPlayer = {
         id: playerId,
@@ -81,16 +88,38 @@ export async function joinRoom(roomCode, playerName) {
         persona
     };
 
-    const updatedPlayers = [...currentPlayers, newPlayer];
-    await update(roomRef, { players: updatedPlayers });
+    await update(roomRef, {
+        players: [...currentPlayers, newPlayer]
+    });
 
     return { roomCode, playerId };
 }
 
 export async function leaveRoom(roomCode, playerId) {
+    // first load just the players
+    const playersRef = ref(db, `rooms/${roomCode}/players`);
+    const snapPlayers = await get(playersRef);
+    if (!snapPlayers.exists()) throw new Error("ROOM_NOT_FOUND");
+
+    const current = snapPlayers.val() || [];
+    const updatedPlayers = current.filter(p => p.id !== playerId);
+
+    // now load room-level data to decide if we must bump to "results"
     const roomRef = ref(db, `rooms/${roomCode}`);
-    const snap = await get(roomRef);
-    if (!snap.exists()) throw new Error("ROOM_NOT_FOUND");
-    const players = snap.val().players.filter(p => p.id !== playerId);
-    await update(roomRef, { players });
+    const snapRoom = await get(roomRef);
+    const room = snapRoom.val() || {};
+    const { spyIndex, stage } = room;
+    const spyId = spyIndex + 1;
+    const activePhases = ["game", "vote", "spyGuess"];
+    const newStage = (playerId === spyId && activePhases.includes(stage))
+        ? "results"
+        : stage;
+
+    // overwrite the entire players array (removes any holes)
+    await set(playersRef, updatedPlayers);
+
+    // if stage changed, write it too
+    if (newStage !== stage) {
+        await update(roomRef, { stage: newStage });
+    }
 }

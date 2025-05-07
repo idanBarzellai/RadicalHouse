@@ -16,6 +16,27 @@ export default function EndResults({
     const isMaster = playerId === masterId;
     const isSpy = playerId === spyId;
 
+    // if the spy was removed, announce an automatic players-win
+    const spyStillHere = players.some(p => p.id === spyId);
+    if (!spyStillHere) {
+        return (
+            <div className="page-container">
+                <h2>תוצאות המשחק</h2>
+                <p>המרגל עזב באמצע המשחק !</p>
+
+                {/* offer back-to-home or next round as normal */}
+                <button
+                    className="button-rounded"
+                    onClick={async () => {
+                        // clean up room (remove master so everyone resets) if you like…
+                        onExit();
+                    }}
+                >
+                    חזרה לדף הבית
+                </button>
+            </div>
+        );
+    }
     // =======================
     // 1. חישוב תוצאות כרגיל
     // =======================

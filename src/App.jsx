@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { update, ref as dbRef, onValue } from "firebase/database";
+import { update, ref as dbRef, onValue, onDisconnect } from "firebase/database";
 import { db } from "./firebase";
 import LobbyScreen from "./gameStates/LobbyScreen";
 import Game from "./gameStates/Game";
@@ -41,7 +41,12 @@ export default function App() {
     if (!roomCode) return;
     const roomRef = dbRef(db, `rooms/${roomCode}`);
     const unsubscribe = onValue(roomRef, (snapshot) => {
-      setRoomData(snapshot.val());
+      const data = snapshot.val() || {};
+      // normalize players → array, drop null/undefined
+      const raw = data.players || [];
+      const arr = Array.isArray(raw) ? raw : Object.values(raw);
+      const players = arr.filter(p => p != null);
+      setRoomData({ ...data, players });
     });
     return () => unsubscribe();
   }, [roomCode]);
@@ -55,6 +60,28 @@ export default function App() {
     }
   }, [roomData]);
 
+  // presence / onDisconnect registration:
+  useEffect(() => {
+    if (!roomCode || !roomData || playerId == null) return;
+    // find my index in the array
+    const idx = roomData.players.findIndex(p => p.id === playerId);
+    if (idx < 0) return;
+    const playerRef = dbRef(db, `rooms/${roomCode}/players/${idx}`);
+    onDisconnect(playerRef).remove();
+  }, [roomCode, playerId, roomData]);
+
+  // if the spy is missing during an active round, push to "results"
+  useEffect(() => {
+    if (!roomData) return;
+    const { stage, spyId, players } = roomData;
+    const activeStages = ["game", "vote", "spyGuess"];
+    const spyStillHere = players.some(p => p.id === spyId);
+    if (activeStages.includes(stage) && !spyStillHere) {
+      const roomRef = dbRef(db, `rooms/${roomCode}`);
+      update(roomRef, { stage: "results" });
+    }
+  }, [roomData, roomCode]);
+
   if (!roomCode || !roomData) {
     return (
       <SplashScreen onJoin={({ roomCode, playerId }) => {
@@ -67,29 +94,27 @@ export default function App() {
   // const player = roomData.players.find(p => p.id === playerId);
 
   return (
-    <div >
-      {roomData.stage === "lobby" ? (
-        <LobbyScreen
-          roomCode={roomCode}
-          players={roomData.players}
-          playerId={playerId}
-          onStartGame={startGameForAll}
-          onExit={() => {
-            setRoomCode(null);
-            setRoomData(null);
-          }}
-        />
-      ) : (
-        <Game
-          playerId={playerId}
-          roomData={roomData}
-          roomCode={roomCode}
-          onExit={() => {
-            setRoomCode(null);
-            setRoomData(null);
-          }}
-        />
-      )}
-    </div>
+    roomData.stage === "lobby" ? (
+      <LobbyScreen
+        roomCode={roomCode}
+        players={roomData.players}
+        playerId={playerId}
+        onStartGame={startGameForAll}
+        onExit={() => {
+          setRoomCode(null);
+          setRoomData(null);
+        }}
+      />
+    ) : (
+      <Game
+        playerId={playerId}
+        roomData={roomData}
+        roomCode={roomCode}
+        onExit={() => {
+          setRoomCode(null);
+          setRoomData(null);
+        }}
+      />
+    )
   );
 }
