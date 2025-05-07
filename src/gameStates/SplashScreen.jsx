@@ -34,36 +34,32 @@ export default function SplashScreen({ onJoin }) {
 
     return (
         <>
-            <div className="page-container">
-                <LogoHeader />
-
-                <div className="screen-heading">
-                    <p><strong>ברוכים הבאים לספיי־רדיקל!</strong></p>
-                    <p>
-                        גלו דמויות מהקהילה, גלו את האירועים בבית רדיקל,<br />
-                        ונסו לחשוף – מי ביניכם הוא המרגל שלא יודע היכן הוא נמצא?
-                    </p>
-                    <p className="screen-sub">האם תצליחו לגלות אותו?</p>
-                </div>
-
-                <input
-                    className="text-input"
-                    type="text"
-                    value={playerName}
-                    onChange={e => setPlayerName(e.target.value)}
-                    placeholder="שם שחקן"
-                />
-
-                <button className="button-rounded" onClick={handleCreateRoom}>
-                    התחל משחק חדש
-                </button>
-                <button
-                    className="button-rounded"
-                    onClick={() => setShowJoinModal(true)}
-                >
-                    הצטרף לקבוצה
-                </button>
+            <div className="screen-heading">
+                <p><strong>ברוכים הבאים לספיי־רדיקל!</strong></p>
+                <p>
+                    גלו דמויות מהקהילה, גלו את האירועים בבית רדיקל,<br />
+                    ונסו לחשוף – מי ביניכם הוא המרגל שלא יודע היכן הוא נמצא?
+                </p>
+                <p className="screen-sub">האם תצליחו לגלות אותו?</p>
             </div>
+
+            <input
+                className="text-input"
+                type="text"
+                value={playerName}
+                onChange={e => setPlayerName(e.target.value)}
+                placeholder="שם שחקן"
+            />
+
+            <button className="button-rounded" onClick={handleCreateRoom}>
+                התחל משחק חדש
+            </button>
+            <button
+                className="button-rounded"
+                onClick={() => setShowJoinModal(true)}
+            >
+                הצטרף לקבוצה
+            </button>
 
             {showJoinModal && (
                 <div className="modal-overlay" onClick={() => setShowJoinModal(false)}>

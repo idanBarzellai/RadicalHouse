@@ -24,21 +24,20 @@ body {
 
 /* קופסת התוכן שלך */
 .page-container {
-  /* גודל וגבולות */
-  width: 100%;
-  max-width: 500px;
-
-  /* המפתח: מרג'ין אוטומטי לרוחב */
+  width: 100vw;
+  max-width: 400px;
+  height: 90vw;
+  max-height: 700px;
+  min-height: 500px;
+  min-width: 320px;
   margin: 2rem auto;
-
-  /* שאר הסגנונות שלך */
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-
   background-color: #f6f1ec;
-  padding: 2rem;
+  padding: 60px 2rem 2rem 2rem;
+  /* top padding for logo/buttons */
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
   color: #222;
@@ -47,6 +46,17 @@ body {
   position: relative;
 }
 
+@media (max-width: 500px) {
+  .page-container {
+    width: 98vw;
+    height: 98vw;
+    max-width: 98vw;
+    max-height: 98vw;
+    min-width: 0;
+    min-height: 0;
+    padding: 50px 1vw 1vw 1vw;
+  }
+}
 
 .screen-heading {
   text-align: center;

@@ -102,36 +102,34 @@ export default function App() {
     }
   }, [roomData, roomCode]);
 
-  if (!roomCode || !roomData) {
-    return (
-      <SplashScreen onJoin={({ roomCode, playerId }) => {
-        setRoomCode(roomCode);
-        setPlayerId(playerId);
-      }} />
-    );
-  }
-
   return (
     <div className="page-container">
       <LogoHeader />
       <HelpButton />
-      <ExitButton onExit={handleExit} />
-      {roomData.stage === "lobby" ? (
-        <LobbyScreen
-          roomCode={roomCode}
-          players={roomData.players}
-          playerId={playerId}
-          onStartGame={startGameForAll}
-          onExit={handleExit}
-        />
-      ) : (
-        <Game
-          playerId={playerId}
-          roomData={roomData}
-          roomCode={roomCode}
-          onExit={handleExit}
-        />
-      )}
+      {(!roomCode || !roomData) ? (
+        <SplashScreen onJoin={({ roomCode, playerId }) => {
+          setRoomCode(roomCode);
+          setPlayerId(playerId);
+        }} />
+      ) : <>
+        <ExitButton onExit={handleExit} />
+        {roomData.stage === "lobby" ? (
+          <LobbyScreen
+            roomCode={roomCode}
+            players={roomData.players}
+            playerId={playerId}
+            onStartGame={startGameForAll}
+            onExit={handleExit}
+          />
+        ) : (
+          <Game
+            playerId={playerId}
+            roomData={roomData}
+            roomCode={roomCode}
+            onExit={handleExit}
+          />
+        )}
+      </>}
     </div>
   );
 }
