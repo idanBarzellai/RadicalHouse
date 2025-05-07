@@ -10,6 +10,28 @@ import EndResults from "./EndResults";
 import "./styles/Game.css";
 import ExitButton from "../components/ExitButton";
 
+// Debug button component
+const DebugButton = ({ onClick }) => (
+    <button
+        className="debug-button"
+        onClick={onClick}
+        style={{
+            position: 'fixed',
+            bottom: '20px',
+            right: '20px',
+            padding: '8px 16px',
+            backgroundColor: '#ff4444',
+            color: 'white',
+            border: 'none',
+            borderRadius: '4px',
+            cursor: 'pointer',
+            zIndex: 1000
+        }}
+    >
+        Debug: End Game
+    </button>
+);
+
 export default function Game({ playerId, roomData, roomCode, onExit }) {
     const isSpy = playerId === roomData.spyId;
     const me = roomData.players.find((p) => p.id === playerId) || {};
@@ -94,6 +116,12 @@ export default function Game({ playerId, roomData, roomCode, onExit }) {
         update(dbRef(db, `rooms/${roomCode}`), { spyGuess: title });
     };
 
+    const handleDebugEndGame = () => {
+        if (roomData.stage === "game") {
+            update(dbRef(db, `rooms/${roomCode}`), { stage: "vote" });
+        }
+    };
+
     // render per-stage
     if (roomData.stage === "vote") {
         return isSpy ? (
@@ -125,14 +153,13 @@ export default function Game({ playerId, roomData, roomCode, onExit }) {
 
     // normal gameplay screen
     return (
-        <div className="page-container">
+        <>
             <LogoHeader />
 
             {typeof timeLeft === "number" && (
                 <div className="game-timer">{formatTime(timeLeft)}</div>
             )}
 
-            {/* <RoomCodeDisplay roomCode={roomCode} /> */}
             {isSpy
                 ? <SpyView />
                 : <PlayerView
@@ -158,8 +185,8 @@ export default function Game({ playerId, roomData, roomCode, onExit }) {
                 </ul>
             </div>
 
-            {/* leave mid-game */}
-            <ExitButton />
-        </div>
+            {/* Debug button only shown during game stage */}
+            {roomData.stage === "game" && <DebugButton onClick={handleDebugEndGame} />}
+        </>
     );
 }

@@ -10,16 +10,7 @@ export default function LobbyScreen({ roomCode, players = [], playerId, onStartG
     const canStart = count >= 3 && count <= 6;
     const roomFull = count >= 6;
     return (
-        <div className="page-container">
-            <div className="page-header">
-                <HelpButton />
-                <LogoHeader />
-                <ExitButton
-                    roomCode={roomCode}
-                    playerId={playerId}
-                    onExit={onExit}
-                />
-            </div>
+        <>
             <RoomCodeDisplay roomCode={roomCode} />
 
             <h3 className="players-label">שחקנים בחדר</h3>
@@ -46,6 +37,6 @@ export default function LobbyScreen({ roomCode, players = [], playerId, onStartG
                 ? <EventCarousel />
                 : <p style={{ color: "#b00", marginTop: "1rem" }}>החדר מלא (מקסימום 6 שחקנים)</p>
             }
-        </div>
+        </>
     );
 }

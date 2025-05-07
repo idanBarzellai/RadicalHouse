@@ -1,38 +1,76 @@
 .help-button {
     position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: #33b5e5;
+    color: white;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.2s;
+}
+
+.help-button:hover {
+    background-color: #0099cc;
+}
+
+.help-modal {
+    position: fixed;
     top: 0;
     left: 0;
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
-    background: #e8e2dc;
-    border: none;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    z-index: 2;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1001;
 }
 
-.help-popup {
-    position: absolute;
-    top: 40px;
-    left: 0;
-    background: #fff;
-    padding: 1rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
-    max-width: 300px;
-    text-align: right;
-    z-index: 1;
+.help-content {
+    background-color: white;
+    padding: 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    direction: rtl;
 }
 
-.help-close {
-    position: absolute;
-    top: 0.25rem;
-    left: 0.5rem;
-    background: none;
+.help-content h2 {
+    margin-top: 0;
+    color: #333;
+    text-align: center;
+}
+
+.help-content p {
+    margin: 10px 0;
+    line-height: 1.5;
+    color: #666;
+}
+
+.close-help {
+    display: block;
+    margin: 20px auto 0;
+    padding: 8px 20px;
+    background-color: #33b5e5;
+    color: white;
     border: none;
-    font-size: 1rem;
+    border-radius: 4px;
     cursor: pointer;
-    color: #888;
+    transition: background-color 0.2s;
+}
+
+.close-help:hover {
+    background-color: #0099cc;
 }

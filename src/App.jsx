@@ -4,6 +4,9 @@ import { db } from "./firebase";
 import LobbyScreen from "./gameStates/LobbyScreen";
 import Game from "./gameStates/Game";
 import SplashScreen from "./gameStates/SplashScreen";
+import HelpButton from "./components/HelpButton";
+import ExitButton from "./components/ExitButton";
+import LogoHeader from "./components/LogoHeader";
 import './index.css';
 
 export default function App() {
@@ -11,19 +14,36 @@ export default function App() {
   const [playerId, setPlayerId] = useState(null);
   const [roomData, setRoomData] = useState(null);
 
+  const handleExit = async () => {
+    if (roomCode && playerId) {
+      try {
+        await leaveRoom(roomCode, playerId);
+      } catch (error) {
+        console.error('Error leaving room:', error);
+      }
+    }
+    setRoomCode(null);
+    setRoomData(null);
+    setPlayerId(null);
+  };
+
   const startGameForAll = async () => {
     const refPath = dbRef(db, `rooms/${roomCode}`);
     const players = roomData.players;
 
-    // בחר מרגל אקראי
-    const spyPlayer = players[Math.floor(Math.random() * players.length)];
-    const spyId = spyPlayer.id
+    // Check minimum player count
+    if (players.length < 3) {
+      throw new Error("NOT_ENOUGH_PLAYERS");
+    }
+
+    // Use the existing spyIndex from room creation
+    const spyId = roomData.spyIndex + 1;
 
     // גם מי יתחיל את הסבב (שומר בקוד שלך)
     const starterId = Math.floor(Math.random() * players.length) + 1;
 
     // חישוב זמן התחלה וסיום
-    const durationSeconds = players.length * 2; // Change to  * 60
+    const durationSeconds = players.length * 60; // 1 minute per player
     const startTimestamp = Date.now();
     const endTimestamp = startTimestamp + durationSeconds * 1000;
 
@@ -91,30 +111,27 @@ export default function App() {
     );
   }
 
-  // const player = roomData.players.find(p => p.id === playerId);
-
   return (
-    roomData.stage === "lobby" ? (
-      <LobbyScreen
-        roomCode={roomCode}
-        players={roomData.players}
-        playerId={playerId}
-        onStartGame={startGameForAll}
-        onExit={() => {
-          setRoomCode(null);
-          setRoomData(null);
-        }}
-      />
-    ) : (
-      <Game
-        playerId={playerId}
-        roomData={roomData}
-        roomCode={roomCode}
-        onExit={() => {
-          setRoomCode(null);
-          setRoomData(null);
-        }}
-      />
-    )
+    <div className="page-container">
+      <LogoHeader />
+      <HelpButton />
+      <ExitButton onExit={handleExit} />
+      {roomData.stage === "lobby" ? (
+        <LobbyScreen
+          roomCode={roomCode}
+          players={roomData.players}
+          playerId={playerId}
+          onStartGame={startGameForAll}
+          onExit={handleExit}
+        />
+      ) : (
+        <Game
+          playerId={playerId}
+          roomData={roomData}
+          roomCode={roomCode}
+          onExit={handleExit}
+        />
+      )}
+    </div>
   );
 }

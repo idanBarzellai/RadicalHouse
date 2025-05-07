@@ -1,18 +1,13 @@
-import { leaveRoom } from "../roomService";
-import "./styles/ExitButton.css";
+import './styles/ExitButton.css';
 
-export default function ExitButton({ roomCode, playerId, onExit }) {
+export default function ExitButton({ onExit }) {
     return (
-        <div >
-            <button
-                className="exit-button"
-                onClick={async () => {
-                    await leaveRoom(roomCode, playerId);
-                    onExit();
-                }}
-            >X</button>
-        </div>
-
+        <button
+            className="exit-button"
+            onClick={onExit}
+        >
+            ✖
+        </button>
     );
 }
 

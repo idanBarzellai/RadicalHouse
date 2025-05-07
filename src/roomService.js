@@ -1,125 +1,179 @@
 import { db } from "./firebase";
 import { ref, get, set, update } from "firebase/database";
 import { personas, events } from "./data";
+import { checkRateLimit } from "./utils/rateLimit";
+
+const MAX_RETRIES = 3;
+const RETRY_DELAY = 1000;
+
+async function retryOperation(operation, retries = MAX_RETRIES) {
+    try {
+        return await operation();
+    } catch (error) {
+        if (retries > 0) {
+            await new Promise(resolve => setTimeout(resolve, RETRY_DELAY));
+            return retryOperation(operation, retries - 1);
+        }
+        throw error;
+    }
+}
 
 function generateRoomCode() {
     return Math.floor(1000 + Math.random() * 9000).toString();
 }
 
+function updateRoomActivity(roomCode) {
+    return update(ref(db, `rooms/${roomCode}`), {
+        lastActivity: Date.now()
+    });
+}
+
 export async function createRoom(playerName) {
-    const roomCode = generateRoomCode();
+    if (!playerName?.trim()) {
+        throw new Error("INVALID_PLAYER_NAME");
+    }
 
-    // ערבוב רשימת הפרסונות
-    const shuffledPersonas = [...personas].sort(() => 0.5 - Math.random());
+    if (!checkRateLimit(`create_${playerName}`)) {
+        throw new Error("RATE_LIMIT_EXCEEDED");
+    }
 
-    // מיקום אקראי של המרגל ברשימה (id = spyIndex + 1)
-    const spyIndex = Math.floor(Math.random() * shuffledPersonas.length);
-    console.log("spy index " + spyIndex);
+    return retryOperation(async () => {
+        const roomCode = generateRoomCode();
+        const shuffledPersonas = [...personas].sort(() => 0.5 - Math.random());
+        const spyIndex = Math.floor(Math.random() * shuffledPersonas.length);
 
-    // בונים את השחקן הראשון
-    const firstId = 1;
-    const firstIsSpy = spyIndex === (firstId - 1);
-    const firstPersona = firstIsSpy ? null : shuffledPersonas[firstId - 1];
+        const firstId = 1;
+        const firstIsSpy = spyIndex === (firstId - 1);
+        const firstPersona = firstIsSpy ? null : shuffledPersonas[firstId - 1];
 
-    const players = [
-        {
-            id: firstId,
-            name: playerName,
-            isSpy: firstIsSpy,
-            persona: firstPersona
-        }
-    ];
+        const players = [
+            {
+                id: firstId,
+                name: playerName,
+                isSpy: firstIsSpy,
+                persona: firstPersona
+            }
+        ];
 
-    const roomData = {
-        shuffledPersonas,
-        spyIndex,
-        event: events[Math.floor(Math.random() * events.length)],
-        stage: "lobby",
-        players,
-        turnStarterId: null,
-        startTimestamp: null,
-        endTimestamp: null
-    };
+        const roomData = {
+            shuffledPersonas,
+            spyIndex,
+            event: events[Math.floor(Math.random() * events.length)],
+            stage: "lobby",
+            players,
+            turnStarterId: null,
+            startTimestamp: null,
+            endTimestamp: null,
+            createdAt: Date.now(),
+            lastActivity: Date.now()
+        };
 
-    await set(ref(db, `rooms/${roomCode}`), roomData);
-    return { roomCode, playerId: firstId };
+        await set(ref(db, `rooms/${roomCode}`), roomData);
+        return { roomCode, playerId: firstId };
+    });
 }
 
 export async function joinRoom(roomCode, playerName) {
-    const roomRef = ref(db, `rooms/${roomCode}`);
-    const snapshot = await get(roomRef);
-
-    if (!snapshot.exists()) {
-        throw new Error("ROOM_NOT_FOUND");
+    if (!playerName?.trim()) {
+        throw new Error("INVALID_PLAYER_NAME");
     }
 
-    const room = snapshot.val();
-    // 🚫 lock out mid-game
-    if (["game", "vote", "spyGuess"].includes(room.stage)) {
-        throw new Error("GAME_IN_PROGRESS");
+    if (!roomCode?.match(/^\d{4}$/)) {
+        throw new Error("INVALID_ROOM_CODE");
     }
 
-    // normalize players in DB → dense array
-    const raw = room.players || [];
-    const arr = Array.isArray(raw) ? raw : Object.values(raw);
-    const currentPlayers = arr.filter(p => p != null);
-
-    const count = currentPlayers.length;
-    // 🚫 enforce max 6
-    if (count >= 6) {
-        throw new Error("ROOM_FULL");
+    if (!checkRateLimit(`join_${playerName}`)) {
+        throw new Error("RATE_LIMIT_EXCEEDED");
     }
 
-    const playerId = count + 1;
-    const { shuffledPersonas, spyIndex } = room;
+    return retryOperation(async () => {
+        const roomRef = ref(db, `rooms/${roomCode}`);
+        const snapshot = await get(roomRef);
 
-    // קביעת האם המרגל לפי ה־spyIndex שהוגדר ב־createRoom
-    const isSpy = spyIndex === (playerId - 1);
-    // לכל שחקן שאינו המרגל נותנים את הפרסונה המתאימה מתוך shuffledPersonas
-    // assign persona or null (never undefined)
-    const persona = isSpy
-        ? null
-        : (shuffledPersonas[playerId - 1] ?? null);
+        if (!snapshot.exists()) {
+            throw new Error("ROOM_NOT_FOUND");
+        }
 
-    const newPlayer = {
-        id: playerId,
-        name: playerName,
-        isSpy,
-        persona
-    };
+        const room = snapshot.val();
 
-    await update(roomRef, {
-        players: [...currentPlayers, newPlayer]
+        // Check if room is too old (24 hours)
+        if (Date.now() - room.createdAt > 24 * 60 * 60 * 1000) {
+            throw new Error("ROOM_EXPIRED");
+        }
+
+        if (["game", "vote", "spyGuess"].includes(room.stage)) {
+            throw new Error("GAME_IN_PROGRESS");
+        }
+
+        const raw = room.players || [];
+        const arr = Array.isArray(raw) ? raw : Object.values(raw);
+        const currentPlayers = arr.filter(p => p != null);
+
+        if (currentPlayers.length >= 6) {
+            throw new Error("ROOM_FULL");
+        }
+
+        const playerId = currentPlayers.length + 1;
+        const { shuffledPersonas, spyIndex } = room;
+
+        const isSpy = spyIndex === (playerId - 1);
+        const persona = isSpy ? null : (shuffledPersonas[playerId - 1] ?? null);
+
+        const newPlayer = {
+            id: playerId,
+            name: playerName,
+            isSpy,
+            persona
+        };
+
+        await update(roomRef, {
+            players: [...currentPlayers, newPlayer],
+            lastActivity: Date.now()
+        });
+
+        return { roomCode, playerId };
     });
-
-    return { roomCode, playerId };
 }
 
 export async function leaveRoom(roomCode, playerId) {
-    // first load just the players
-    const playersRef = ref(db, `rooms/${roomCode}/players`);
-    const snapPlayers = await get(playersRef);
-    if (!snapPlayers.exists()) throw new Error("ROOM_NOT_FOUND");
-
-    const current = snapPlayers.val() || [];
-    const updatedPlayers = current.filter(p => p.id !== playerId);
-
-    // now load room-level data to decide if we must bump to "results"
-    const roomRef = ref(db, `rooms/${roomCode}`);
-    const snapRoom = await get(roomRef);
-    const room = snapRoom.val() || {};
-    const { spyIndex, stage } = room;
-    const spyId = spyIndex + 1;
-    const activePhases = ["game", "vote", "spyGuess"];
-    const newStage = (playerId === spyId && activePhases.includes(stage))
-        ? "results"
-        : stage;
-
-    // overwrite the entire players array (removes any holes)
-    await set(playersRef, updatedPlayers);
-
-    // if stage changed, write it too
-    if (newStage !== stage) {
-        await update(roomRef, { stage: newStage });
+    if (!roomCode?.match(/^\d{4}$/)) {
+        throw new Error("INVALID_ROOM_CODE");
     }
+
+    return retryOperation(async () => {
+        const playersRef = ref(db, `rooms/${roomCode}/players`);
+        const snapPlayers = await get(playersRef);
+
+        if (!snapPlayers.exists()) {
+            throw new Error("ROOM_NOT_FOUND");
+        }
+
+        const current = snapPlayers.val() || [];
+        const updatedPlayers = current.filter(p => p.id !== playerId);
+
+        const roomRef = ref(db, `rooms/${roomCode}`);
+        const snapRoom = await get(roomRef);
+        const room = snapRoom.val() || {};
+
+        const { spyIndex, stage } = room;
+        const spyId = spyIndex + 1;
+        const activePhases = ["game", "vote", "spyGuess"];
+        const newStage = (playerId === spyId && activePhases.includes(stage))
+            ? "results"
+            : stage;
+
+        await set(playersRef, updatedPlayers);
+
+        if (newStage !== stage) {
+            await update(roomRef, {
+                stage: newStage,
+                lastActivity: Date.now()
+            });
+        }
+
+        // If room is empty, delete it
+        if (updatedPlayers.length === 0) {
+            await set(roomRef, null);
+        }
+    });
 }

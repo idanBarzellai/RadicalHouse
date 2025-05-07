@@ -1,24 +1,36 @@
-import { useState } from "react";
-import "./styles/HelpButton.css";
+import { useState } from 'react';
+import './styles/HelpButton.css';
 
 export default function HelpButton() {
-    const [showHelp, setShowHelp] = useState(false);
+    const [isOpen, setIsOpen] = useState(false);
 
     return (
-        <div>
-            <button className="help-button" onClick={() => setShowHelp(true)}>?</button>
+        <>
+            <button
+                className="help-button"
+                onClick={() => setIsOpen(true)}
+            >
+                ?
+            </button>
 
-            {showHelp && (
-                <div className="help-popup">
-                    <button className="help-close" onClick={() => setShowHelp(false)}>✖</button>
-                    <h3>איך משחקים?</h3>
-                    <p>
-                        לכל שחקן מוצגת דמות ואירוע, חוץ מהמרגל שלא מקבל אירוע.<br />
-                        המרגל מנסה להבין היכן הוא נמצא – והאחרים מנסים לחשוף אותו.<br />
-                        בסיום הסיבוב, כל אחד מצביע על מי הוא חושב המרגל!
-                    </p>
+            {isOpen && (
+                <div className="help-modal">
+                    <div className="help-content">
+                        <h2>איך משחקים?</h2>
+                        <p>במשחק זה, כל השחקנים מקבלים דמות ומיקום משותף - חוץ מאחד שהוא המרגל.</p>
+                        <p>המרגל לא יודע את המיקום, אבל צריך להעמיד פנים שהוא יודע.</p>
+                        <p>השחקנים מתחלפים בשאלות על המיקום, והמרגל צריך לענות בלי לחשוף שהוא לא יודע.</p>
+                        <p>בסוף הזמן, כולם מצביעים מי לדעתם המרגל.</p>
+                        <p>המרגל מנצח אם לא זיהו אותו, או אם הצליח לנחש נכון את המיקום.</p>
+                        <button
+                            className="close-help"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            סגור
+                        </button>
+                    </div>
                 </div>
             )}
-        </div>
+        </>
     );
 }
