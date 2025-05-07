@@ -4,11 +4,11 @@ import { db } from "../firebase";
 import SpyView from "../components/SpyView";
 import PlayerView from "../components/PlayerView";
 import LogoHeader from "../components/LogoHeader";
-import { leaveRoom } from "../roomService";
 import VotePhase from "../components/VotePhase";
 import SpyGuess from "../components/SpyGuess";
 import EndResults from "./EndResults";
 import "./styles/Game.css";
+import ExitButton from "../components/ExitButton";
 
 export default function Game({ playerId, roomData, roomCode, onExit }) {
     const isSpy = playerId === roomData.spyId;
@@ -159,16 +159,7 @@ export default function Game({ playerId, roomData, roomCode, onExit }) {
             </div>
 
             {/* leave mid-game */}
-            <button
-                className="button-rounded"
-                onClick={async () => {
-                    await leaveRoom(roomCode, playerId);
-                    onExit();
-                }}
-                style={{ marginTop: "1rem", backgroundColor: "#f66", color: "#fff" }}
-            >
-                עזיבת המשחק
-            </button>
+            <ExitButton />
         </div>
     );
 }

@@ -1,7 +1,8 @@
 import EventCarousel from "../components/EventCarousel";
+import ExitButton from "../components/ExitButton";
 import LogoHeader from "../components/LogoHeader";
+import HelpButton from "../components/HelpButton"
 import RoomCodeDisplay from "../components/RoomCodeDisplay";
-import { leaveRoom } from "../roomService";
 import "./styles/LobbyScreen.css"
 export default function LobbyScreen({ roomCode, players = [], playerId, onStartGame, onExit }) {
     const isMaster = playerId === 1;
@@ -10,7 +11,15 @@ export default function LobbyScreen({ roomCode, players = [], playerId, onStartG
     const roomFull = count >= 6;
     return (
         <div className="page-container">
-            <LogoHeader />
+            <div className="page-header">
+                <HelpButton />
+                <LogoHeader />
+                <ExitButton
+                    roomCode={roomCode}
+                    playerId={playerId}
+                    onExit={onExit}
+                />
+            </div>
             <RoomCodeDisplay roomCode={roomCode} />
 
             <h3 className="players-label">שחקנים בחדר</h3>
@@ -19,6 +28,7 @@ export default function LobbyScreen({ roomCode, players = [], playerId, onStartG
                     <li key={p.id} className="player-name">{p.name}</li>
                 ))}
             </ul>
+            <span className="room-code-display">ממתין לכניסת שחקנים...</span>
             {isMaster && (
                 <button
                     onClick={onStartGame}
@@ -32,18 +42,6 @@ export default function LobbyScreen({ roomCode, players = [], playerId, onStartG
                     התחל משחק
                 </button>
             )}
-            {/* leave room */}
-            <button
-                className="button-rounded"
-                onClick={async () => {
-                    await leaveRoom(roomCode, playerId);
-                    onExit();
-                }}
-                style={{ marginTop: "1rem", backgroundColor: "#f66", color: "#fff" }}
-            >
-                עזיבת החדר
-            </button>
-
             {!roomFull
                 ? <EventCarousel />
                 : <p style={{ color: "#b00", marginTop: "1rem" }}>החדר מלא (מקסימום 6 שחקנים)</p>

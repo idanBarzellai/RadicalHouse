@@ -1,0 +1,11 @@
+.exit-button {
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #f66;
+    border: none;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 2;
+}

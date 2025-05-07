@@ -5,7 +5,7 @@ export default function HelpButton() {
     const [showHelp, setShowHelp] = useState(false);
 
     return (
-        <div className="help-wrapper">
+        <div>
             <button className="help-button" onClick={() => setShowHelp(true)}>?</button>
 
             {showHelp && (
