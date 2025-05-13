@@ -1,13 +1,14 @@
 import { useState, useEffect } from "react";
 import { update, ref as dbRef, onValue, onDisconnect } from "firebase/database";
-import { db } from "./firebase";
-import LobbyScreen from "./gameStates/LobbyScreen";
-import Game from "./gameStates/Game";
-import SplashScreen from "./gameStates/SplashScreen";
-import HelpButton from "./components/HelpButton";
-import ExitButton from "./components/ExitButton";
-import LogoHeader from "./components/LogoHeader";
+import { db } from "./services/firebase";
+import LobbyScreen from "./screens/LobbyScreen";
+import GameScreen from "./screens/GameScreen";
+import SplashScreen from "./screens/SplashScreen";
+import HelpButton from "./components/ui/HelpButton";
+import ExitButton from "./components/ui/ExitButton";
+import LogoHeader from "./components/ui/LogoHeader";
 import './index.css';
+import { leaveRoom } from "./services/roomService";
 
 export default function App() {
   const [roomCode, setRoomCode] = useState(null);
@@ -96,9 +97,16 @@ export default function App() {
     const { stage, spyId, players } = roomData;
     const activeStages = ["game", "vote", "spyGuess"];
     const spyStillHere = players.some(p => p.id === spyId);
-    if (activeStages.includes(stage) && !spyStillHere) {
-      const roomRef = dbRef(db, `rooms/${roomCode}`);
-      update(roomRef, { stage: "results" });
+
+    // Only check for spy presence if we have valid data
+    if (activeStages.includes(stage) && spyId && players.length > 0 && !spyStillHere) {
+      // Add a small delay to prevent false positives during initial load
+      const timeoutId = setTimeout(() => {
+        const roomRef = dbRef(db, `rooms/${roomCode}`);
+        update(roomRef, { stage: "results" });
+      }, 1000);
+
+      return () => clearTimeout(timeoutId);
     }
   }, [roomData, roomCode]);
 
@@ -122,7 +130,7 @@ export default function App() {
             onExit={handleExit}
           />
         ) : (
-          <Game
+          <GameScreen
             playerId={playerId}
             roomData={roomData}
             roomCode={roomCode}

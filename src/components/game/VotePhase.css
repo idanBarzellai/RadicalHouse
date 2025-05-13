@@ -1,0 +1,51 @@
+/* Game screen */
+.game-screen {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+}
+
+.game-players {
+    text-align: right;
+}
+
+.game-timer {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #b80000;
+    margin: 1rem 0;
+    background-color: #f0e6e6;
+    padding: 0.5rem 1rem;
+    border-radius: 12px;
+}
+
+.players-label {
+    font-size: 1.1rem;
+    font-weight: bold;
+    margin-bottom: 0.75rem;
+    color: #333;
+}
+
+.players-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.player-name {
+    margin-bottom: 0.5rem;
+    font-size: 1rem;
+    color: #222;
+}
+
+.player-name.current-turn {
+    font-weight: bold;
+    color: darkgreen;
+}
+
+.room-code-display {
+    font-size: 1rem;
+    color: #666;
+    margin: 1rem 0;
+    font-weight: bold;
+}

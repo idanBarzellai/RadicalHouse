@@ -1,5 +1,4 @@
-import { events } from "../data";
-import "./styles/PlayerView.css"
+import { events } from "../../data/data";
 
 export default function SpyView() {
     return (

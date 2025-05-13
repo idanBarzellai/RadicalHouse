@@ -1,7 +1,7 @@
 import { db } from "./firebase";
 import { ref, get, set, update } from "firebase/database";
-import { personas, events } from "./data";
-import { checkRateLimit } from "./utils/rateLimit";
+import { personas, events } from "../data/data";
+import { checkRateLimit } from "../utils/rateLimit";
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY = 1000;

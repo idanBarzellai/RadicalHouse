@@ -1,4 +1,4 @@
-import "./styles/RoomCodeDisplay.css";
+import './RoomCodeDisplay.css';
 
 export default function RoomCodeDisplay({ roomCode }) {
     // const [copied, setCopied] = useState(false);

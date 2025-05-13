@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { events } from "../data";
-import './styles/EventCarousel.css'
- 
+import { events } from "../../data/data";
+import '../game/EventCarousel.css'
+
 export default function EventCarousel() {
     const [index, setIndex] = useState(0);
     const prev = () => setIndex((index - 1 + events.length) % events.length);

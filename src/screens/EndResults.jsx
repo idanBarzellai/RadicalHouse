@@ -1,8 +1,9 @@
 import { update, ref as dbRef } from "firebase/database";
-import { db } from "../firebase";
-import { events, personas } from "../data";
-import RoomCodeDisplay from "../components/RoomCodeDisplay";
-import { leaveRoom } from "../roomService";
+import { db } from "../services/firebase";
+import { events, personas } from "../data/data";
+import RoomCodeDisplay from "../components/ui/RoomCodeDisplay";
+import { leaveRoom } from "../services/roomService";
+import "./GameScreen.css";
 
 export default function EndResults({
     playerId,
@@ -72,9 +73,9 @@ export default function EndResults({
     }
 
     // =======================================
-    // 2. ניהול toggle “מוכן לסיבוב נוסף”
+    // 2. ניהול toggle "מוכן לסיבוב נוסף"
     // =======================================
-    // מיפוי מי לחץ “מוכן”
+    // מיפוי מי לחץ "מוכן"
     const hasReady = !!ready[playerId];
 
     // players to wait: כל מי שלא מרגל ולא מאסטר
@@ -163,7 +164,7 @@ export default function EndResults({
                     חזרה לדף הבית
                 </button>
 
-                {/* כפתור toggle “אני מוכן / אני לא מוכן” לשחקנים (לא מאסטר) */}
+                {/* כפתור toggle "אני מוכן / אני לא מוכן" לשחקנים (לא מאסטר) */}
                 {!isMaster && (
                     <button
                         className="button-rounded"
@@ -177,11 +178,11 @@ export default function EndResults({
                 {/* הצגת מונה למאסטר */}
                 {isMaster && (
                     <p style={{ margin: "1rem 0", color: "#555" }}>
-                        מחכים ש־{remainingCount} שחקנים יסמנו “מוכן”
+                        מחכים ש־{remainingCount} שחקנים יסמנו "מוכן"
                     </p>
                 )}
 
-                {/* כפתור “התחל סיבוב נוסף” למאסטר, רק כשכולם מוכנים */}
+                {/* כפתור "התחל סיבוב נוסף" למאסטר, רק כשכולם מוכנים */}
                 {isMaster && allReady && (
                     <button
                         className="button-rounded"

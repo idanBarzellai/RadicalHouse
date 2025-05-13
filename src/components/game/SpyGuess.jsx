@@ -1,4 +1,4 @@
-import { events } from "../data";
+import { events } from "../../data/data";
 
 export default function SpyGuess({ onGuess, hasGuessed }) {
     return (

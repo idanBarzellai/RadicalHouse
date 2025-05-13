@@ -1,14 +1,14 @@
 import { useState, useEffect, useRef } from "react";
 import { update, ref as dbRef } from "firebase/database";
-import { db } from "../firebase";
-import SpyView from "../components/SpyView";
-import PlayerView from "../components/PlayerView";
-import LogoHeader from "../components/LogoHeader";
-import VotePhase from "../components/VotePhase";
-import SpyGuess from "../components/SpyGuess";
+import { db } from "../services/firebase";
+import SpyView from "../components/game/SpyView";
+import PlayerView from "../components/game/PlayerView";
+import LogoHeader from "../components/ui/LogoHeader";
+import VotePhase from "../components/game/VotePhase";
+import SpyGuess from "../components/game/SpyGuess";
 import EndResults from "./EndResults";
-import "./styles/Game.css";
-import ExitButton from "../components/ExitButton";
+import ExitButton from "../components/ui/ExitButton";
+import "./GameScreen.css";
 
 // Debug button component
 const DebugButton = ({ onClick }) => (
@@ -32,7 +32,7 @@ const DebugButton = ({ onClick }) => (
     </button>
 );
 
-export default function Game({ playerId, roomData, roomCode, onExit }) {
+export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
     const isSpy = playerId === roomData.spyId;
     const me = roomData.players.find((p) => p.id === playerId) || {};
     const persona = me.persona;

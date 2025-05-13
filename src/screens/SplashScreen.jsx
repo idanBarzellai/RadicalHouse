@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { createRoom, joinRoom } from "../roomService";
-import LogoHeader from "../components/LogoHeader";
-import "./styles/SplashScreen.css";
+import { createRoom, joinRoom } from "../services/roomService";
+import LogoHeader from "../components/ui/LogoHeader";
+import "./SplashScreen.css";
 
 export default function SplashScreen({ onJoin }) {
     const [playerName, setPlayerName] = useState("");

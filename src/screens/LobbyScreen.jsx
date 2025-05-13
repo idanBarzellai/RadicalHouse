@@ -1,9 +1,9 @@
-import EventCarousel from "../components/EventCarousel";
-import ExitButton from "../components/ExitButton";
-import LogoHeader from "../components/LogoHeader";
-import HelpButton from "../components/HelpButton"
-import RoomCodeDisplay from "../components/RoomCodeDisplay";
-import "./styles/LobbyScreen.css"
+import EventCarousel from "../components/game/EventCarousel";
+import ExitButton from "../components/ui/ExitButton";
+import LogoHeader from "../components/ui/LogoHeader";
+import HelpButton from "../components/ui/HelpButton"
+import RoomCodeDisplay from "../components/ui/RoomCodeDisplay";
+import "./LobbyScreen.css"
 export default function LobbyScreen({ roomCode, players = [], playerId, onStartGame, onExit }) {
     const isMaster = playerId === 1;
     const count = players.length;

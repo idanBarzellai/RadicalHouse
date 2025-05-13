@@ -1,4 +1,4 @@
-import './styles/ExitButton.css';
+import './ExitButton.css';
 
 export default function ExitButton({ onExit }) {
     return (

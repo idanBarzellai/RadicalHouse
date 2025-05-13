@@ -1,5 +1,5 @@
 import logo from '/src/assets/radical-logo.svg';
-import "./styles/LogoHeader.css"
+import "./LogoHeader.css"
 
 export default function LogoHeader() {
     return (

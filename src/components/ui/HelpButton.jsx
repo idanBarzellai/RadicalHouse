@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './styles/HelpButton.css';
+import './HelpButton.css';
 
 export default function HelpButton() {
     const [isOpen, setIsOpen] = useState(false);
