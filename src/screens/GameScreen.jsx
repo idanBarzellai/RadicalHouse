@@ -123,6 +123,18 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
         }
     };
 
+    // If not enough players remain, show message and exit button
+    if (roomData.players.length < 3 && roomData.stage !== "lobby") {
+        return (
+            <div className="not-enough-players">
+                <h2>לא נשארו מספיק שחקנים בחדר</h2>
+                <button className="button-rounded" onClick={onExit}>
+                    חזרה לדף הבית
+                </button>
+            </div>
+        );
+    }
+
     // render per-stage
     if (roomData.stage === "vote") {
         return isSpy ? (

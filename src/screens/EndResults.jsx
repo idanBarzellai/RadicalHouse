@@ -38,6 +38,24 @@ export default function EndResults({
             </>
         );
     }
+
+    // if not enough players remain, show message and exit button
+    if (players.length < 3) {
+        return (
+            <>
+                <h2>לא נשארו מספיק שחקנים בחדר</h2>
+                <button
+                    className="button-rounded"
+                    onClick={async () => {
+                        onExit();
+                    }}
+                >
+                    חזרה לדף הבית
+                </button>
+            </>
+        );
+    }
+
     // =======================
     // 1. חישוב תוצאות כרגיל
     // =======================
