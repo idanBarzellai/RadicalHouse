@@ -98,14 +98,15 @@ export default function EndResults({
     // =======================================
     const handleStartNext = () => {
         const shuffled = [...personas].sort(() => 0.5 - Math.random());
-        const newSpyIdx = Math.floor(Math.random() * shuffled.length);
-        const newSpyId = newSpyIdx + 1;
+        // Pick a random player index
+        const spyIdx = Math.floor(Math.random() * players.length);
+        const spyId = players[spyIdx].id;
 
         const newPlayers = players.map((p, i) => ({
             id: p.id,
             name: p.name,
-            isSpy: p.id === newSpyId,
-            persona: p.id === newSpyId ? null : shuffled[i]
+            isSpy: i === spyIdx,
+            persona: i === spyIdx ? null : shuffled[i]
         }));
         const newEvent = events[Math.floor(Math.random() * events.length)];
 
@@ -119,7 +120,7 @@ export default function EndResults({
             stage: "game",
             event: newEvent,
             players: newPlayers,
-            spyId: newSpyId,
+            spyId,
             votes: {},
             spyGuess: null,
             ready: {},
