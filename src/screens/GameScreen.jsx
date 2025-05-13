@@ -27,8 +27,9 @@ const DebugButton = ({ onClick }) => (
             cursor: 'pointer',
             zIndex: 1000
         }}
+        title="Skip the timer and go directly to voting phase"
     >
-        Debug: End Game
+        Debug: Skip Timer (End Game)
     </button>
 );
 
@@ -142,12 +143,14 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
 
     if (roomData.stage === "results") {
         return (
-            <EndResults
-                playerId={playerId}
-                roomData={roomData}
-                roomCode={roomCode}
-                onExit={onExit}
-            />
+            <div className="results-container">
+                <EndResults
+                    playerId={playerId}
+                    roomData={roomData}
+                    roomCode={roomCode}
+                    onExit={onExit}
+                />
+            </div>
         );
     }
 

@@ -21,7 +21,7 @@ export default function EndResults({
     const spyStillHere = players.some(p => p.id === spyId);
     if (!spyStillHere) {
         return (
-            <div className="page-container">
+            <>
                 <h2>תוצאות המשחק</h2>
                 <p>המרגל עזב באמצע המשחק !</p>
 
@@ -35,7 +35,7 @@ export default function EndResults({
                 >
                     חזרה לדף הבית
                 </button>
-            </div>
+            </>
         );
     }
     // =======================
@@ -130,7 +130,7 @@ export default function EndResults({
     };
 
     return (
-        <div className="page-container">
+        <>
             <RoomCodeDisplay roomCode={roomCode} />
             <h2>תוצאות המשחק</h2>
             <p>{resultMessage}</p>
@@ -192,6 +192,6 @@ export default function EndResults({
                     </button>
                 )}
             </div>
-        </div>
+        </>
     );
 }

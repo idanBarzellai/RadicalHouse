@@ -37,8 +37,20 @@ export default function App() {
       throw new Error("NOT_ENOUGH_PLAYERS");
     }
 
-    // Use the existing spyIndex from room creation
-    const spyId = roomData.spyIndex + 1;
+    // Robust spy index assignment
+    let spyIndex = roomData.spyIndex;
+    if (typeof spyIndex !== 'number' || spyIndex < 0 || spyIndex >= players.length) {
+      spyIndex = Math.floor(Math.random() * players.length);
+      await update(refPath, { spyIndex });
+    }
+    const spyId = players[spyIndex]?.id;
+
+    // Update players array to mark the correct spy
+    const updatedPlayers = players.map((p, i) => ({
+      ...p,
+      isSpy: i === spyIndex,
+      persona: i === spyIndex ? null : p.persona // spy gets no persona
+    }));
 
     // גם מי יתחיל את הסבב (שומר בקוד שלך)
     const starterId = Math.floor(Math.random() * players.length) + 1;
@@ -52,6 +64,7 @@ export default function App() {
       stage: "game",
       turnStarterId: starterId,
       spyId,
+      players: updatedPlayers,
       startTimestamp,
       endTimestamp,
     });
