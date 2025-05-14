@@ -163,10 +163,14 @@ export default function EndResults({
             <p>{spyGuess || "המרגל לא ניחש"}</p>
 
             <h3>מספר קולות נגד כל שחקן:</h3>
-            <ul>
+            <ul className="players-list players-list-thumbs">
                 {players.map((p) => (
-                    <li key={p.id}>
-                        {p.name} – הצביעו {voteCounts[p.id] || 0} אנשים
+                    <li key={p.id} className="player-thumb">
+                        <img src={p.persona?.image} alt={p.persona?.name} className="player-thumb-img" />
+                        <span className="player-real-name">{p.name}</span>
+                        <span style={{ fontSize: '0.95rem', color: '#555', marginTop: '0.2rem' }}>
+                            – הצביעו {voteCounts[p.id] || 0} אנשים
+                        </span>
                     </li>
                 ))}
             </ul>

@@ -244,13 +244,15 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
 
             <div className="game-players">
                 <h4 className="players-label">שחקנים בחדר:</h4>
-                <ul className="players-list">
+                <ul className="players-list players-list-thumbs">
                     {roomData.players.map((p) => (
                         <li
                             key={p.id}
-                            className={`player-name ${p.id === roomData.turnStarterId ? "current-turn" : ""}`}
+                            className={`player-name player-thumb ${p.id === roomData.turnStarterId ? "current-turn" : ""}`}
                         >
-                            {p.name} {p.id === roomData.turnStarterId && "← מתחיל"}
+                            <img src={p.persona?.image} alt={p.persona?.name} className="player-thumb-img" />
+                            <span className="player-real-name">{p.name}</span>
+                            {p.id === roomData.turnStarterId && <span className="starter-arrow">← מתחיל</span>}
                         </li>
                     ))}
                 </ul>

@@ -6,15 +6,17 @@ export default function VotePhase({ players, playerId, onVote, hasVoted }) {
         <div className="vote-phase">
             <h2>האם הצלחתם להבין מיהו המרגל?</h2>
             <p>עכשיו הזמן להצביע. מי לדעתכם הוא המרגל?</p>
-            <ul className="players-list">
+            <ul className="players-list players-list-thumbs">
                 {others.map(p => (
-                    <li key={p.id}>
+                    <li key={p.id} className="player-thumb">
                         <button
                             className="button-rounded"
                             disabled={hasVoted}
                             onClick={() => onVote(p.id)}
+                            style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
                         >
-                            {p.name}
+                            <img src={p.persona?.image} alt={p.persona?.name} className="player-thumb-img" />
+                            <span className="player-real-name">{p.name}</span>
                         </button>
                     </li>
                 ))}

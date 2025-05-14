@@ -222,3 +222,47 @@
     color: #b80000;
     opacity: 0.7;
 }
+
+.players-list-thumbs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+    margin-top: 0.5rem;
+}
+
+.player-thumb {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background: #f6f1ec;
+    border-radius: 12px;
+    padding: 0.5rem 0.75rem;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.04);
+    min-width: 70px;
+    min-height: 90px;
+    font-size: 0.95rem;
+}
+
+.player-thumb-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 0.25rem;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.07);
+}
+
+.player-real-name {
+    font-weight: bold;
+    color: #213547;
+    font-size: 0.95rem;
+    margin-bottom: 0.1rem;
+}
+
+.starter-arrow {
+    color: #388e3c;
+    font-size: 1.1rem;
+    margin-top: 0.1rem;
+}
