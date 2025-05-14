@@ -172,3 +172,40 @@
     text-align: center;
     box-shadow: 0 2px 6px rgba(184, 0, 0, 0.05);
 }
+
+.event-block-vertical {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.event-image-vertical {
+    width: 100%;
+    max-width: 220px;
+    border-radius: 12px;
+    margin: 0.5rem auto 0.5rem auto;
+    object-fit: cover;
+    background: #e8e2dc;
+}
+
+.event-description-vertical {
+    font-size: 0.95rem;
+    color: #333;
+    margin-top: 0.5rem;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.event-toggle {
+    margin: 0.5rem 0 0.5rem 0;
+    font-size: 0.95rem;
+    background: none;
+    border: none;
+    color: #b80000;
+    cursor: pointer;
+    text-decoration: underline;
+    font-weight: bold;
+}

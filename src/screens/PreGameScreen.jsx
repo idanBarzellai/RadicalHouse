@@ -12,6 +12,7 @@ export default function PreGameScreen({ playerId, roomData, roomCode }) {
     const ready = roomData.preGameReady?.[playerId];
     const [loading, setLoading] = useState(false);
     const [showDesc, setShowDesc] = useState(false);
+    const [showEvent, setShowEvent] = useState(false);
 
     const handleReady = async () => {
         setLoading(true);
@@ -61,10 +62,17 @@ export default function PreGameScreen({ playerId, roomData, roomCode }) {
                         </ul>
                     </div>
                 ) : (
-                    <div className="event-block">
-                        <div className="event-title">האירוע שלכם:</div>
-                        <div className="event-name">{event.title}</div>
-                        <img src={event.image} alt={event.title} className="event-image" />
+                    <div className="event-block-vertical">
+                        <div className="event-title">האירוע: {event.title}</div>
+                        <button className="toggle-desc event-toggle" onClick={() => setShowEvent(v => !v)}>
+                            {showEvent ? "הסתר פרטי אירוע" : "הצג פרטי אירוע"}
+                        </button>
+                        {showEvent && (
+                            <>
+                                <img src={event.image} alt={event.title} className="event-image-vertical" />
+                                <div className="event-description-vertical">{event.description}</div>
+                            </>
+                        )}
                     </div>
                 )}
             </div>

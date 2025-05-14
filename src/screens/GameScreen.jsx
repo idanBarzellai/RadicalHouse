@@ -43,6 +43,7 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
     const [timeLeft, setTimeLeft] = useState(null);
     const [hasVoted, setHasVoted] = useState(false);
     const [hasGuessed, setHasGuessed] = useState(false);
+    const [showEvent, setShowEvent] = useState(false);
 
     // keep track of previous timeLeft
     const prevTimeRef = useRef(null);
@@ -216,10 +217,17 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
                         </ul>
                     </div>
                 ) : (
-                    <div className="event-block">
-                        <div className="event-title">האירוע שלכם:</div>
-                        <div className="event-name">{roomData.event.title}</div>
-                        <img src={roomData.event.image} alt={roomData.event.title} className="event-image" />
+                    <div className="event-block-vertical">
+                        <div className="event-title">האירוע: {roomData.event.title}</div>
+                        <button className="toggle-desc event-toggle" onClick={() => setShowEvent(v => !v)}>
+                            {showEvent ? "הסתר פרטי אירוע" : "הצג פרטי אירוע"}
+                        </button>
+                        {showEvent && (
+                            <>
+                                <img src={roomData.event.image} alt={roomData.event.title} className="event-image-vertical" />
+                                <div className="event-description-vertical">{roomData.event.description}</div>
+                            </>
+                        )}
                     </div>
                 )}
             </div>
