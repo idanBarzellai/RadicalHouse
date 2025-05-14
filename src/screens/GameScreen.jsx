@@ -101,6 +101,18 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
         roomCode,
     ]);
 
+    // Advance from pre-game to game when all ready (only master triggers)
+    useEffect(() => {
+        if (roomData.stage === "pre-game") {
+            const readyObj = roomData.preGameReady || {};
+            const allReady = roomData.players.length > 0 && roomData.players.every(p => readyObj[p.id]);
+            const isMaster = playerId === 1;
+            if (allReady && isMaster) {
+                update(dbRef(db, `rooms/${roomCode}`), { stage: "game" });
+            }
+        }
+    }, [roomData.stage, roomData.preGameReady, roomData.players, playerId, roomCode]);
+
     const formatTime = (s) => {
         const m = Math.floor(s / 60).toString().padStart(2, "0");
         const sec = (s % 60).toString().padStart(2, "0");

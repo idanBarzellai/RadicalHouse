@@ -9,6 +9,7 @@ import ExitButton from "./components/ui/ExitButton";
 import LogoHeader from "./components/ui/LogoHeader";
 import './index.css';
 import { leaveRoom } from "./services/roomService";
+import PreGameScreen from "./screens/PreGameScreen";
 
 export default function App() {
   const [roomCode, setRoomCode] = useState(null);
@@ -61,10 +62,11 @@ export default function App() {
     const endTimestamp = startTimestamp + durationSeconds * 1000;
 
     await update(refPath, {
-      stage: "game",
+      stage: "pre-game",
       turnStarterId: starterId,
       spyId,
       players: updatedPlayers,
+      preGameReady: {},
       startTimestamp,
       endTimestamp,
     });
@@ -123,6 +125,20 @@ export default function App() {
     }
   }, [roomData, roomCode]);
 
+  // Advance from pre-game to game when all ready (only master triggers)
+  useEffect(() => {
+    if (!roomData) return;
+    if (roomData.stage === "pre-game") {
+      const readyObj = roomData.preGameReady || {};
+      const allReady = roomData.players.length > 0 && roomData.players.every(p => readyObj[p.id]);
+      const isMaster = playerId === 1;
+      if (allReady && isMaster) {
+        const roomRef = dbRef(db, `rooms/${roomCode}`);
+        update(roomRef, { stage: "game" });
+      }
+    }
+  }, [roomData, playerId, roomCode]);
+
   return (
     <div className="page-container">
       <LogoHeader />
@@ -141,6 +157,12 @@ export default function App() {
             playerId={playerId}
             onStartGame={startGameForAll}
             onExit={handleExit}
+          />
+        ) : roomData.stage === "pre-game" ? (
+          <PreGameScreen
+            playerId={playerId}
+            roomData={roomData}
+            roomCode={roomCode}
           />
         ) : (
           <GameScreen

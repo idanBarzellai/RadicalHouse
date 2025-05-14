@@ -1,0 +1,162 @@
+.pre-game-container {
+    width: 100%;
+    max-width: 400px;
+    background: #f6f1ec;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    padding: 2rem 1rem 1.5rem 1rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.persona-block {
+    width: 100%;
+}
+
+.persona-header {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 0.5rem;
+}
+
+.persona-info {
+    flex: 1;
+    text-align: right;
+}
+
+.persona-name {
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0 0.25rem 0;
+}
+
+.persona-occupation {
+    font-size: 1rem;
+    color: #555;
+    margin-bottom: 0.5rem;
+}
+
+.persona-image {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.persona-description {
+    font-size: 0.95rem;
+    color: #333;
+    margin-bottom: 1rem;
+    text-align: right;
+}
+
+.spy-block {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.spy-title {
+    color: #b80000;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+}
+
+.spy-instruction {
+    font-size: 1rem;
+    color: #333;
+    margin-bottom: 0.5rem;
+}
+
+.event-block {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+.event-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #222;
+    margin-bottom: 0.25rem;
+}
+
+.event-name {
+    font-size: 1.1rem;
+    color: #213547;
+    margin-bottom: 0.5rem;
+}
+
+.event-image {
+    width: 100%;
+    max-width: 220px;
+    border-radius: 12px;
+    margin: 0.5rem auto 0.5rem auto;
+    object-fit: cover;
+    background: #e8e2dc;
+}
+
+.ready-btn {
+    margin-top: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.ready-count {
+    font-size: 0.95rem;
+    color: #555;
+    margin-top: 0.25rem;
+}
+
+.spy-event-list {
+    list-style: none;
+    padding: 0;
+    margin: 1rem 0 0 0;
+    text-align: right;
+}
+
+.spy-event-item {
+    font-size: 0.95rem;
+    color: #444;
+    margin-bottom: 0.4rem;
+}
+
+.spy-event-list-block {
+    margin-top: 1.5rem;
+    text-align: right;
+}
+
+.spy-event-list-title {
+    font-size: 1rem;
+    font-weight: bold;
+    color: #b80000;
+    margin-bottom: 0.5rem;
+}
+
+.persona-block.persona-vertical {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.persona-header-vertical {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
+    gap: 1.5rem;
+    width: 100%;
+    justify-content: center;
+    margin-bottom: 0.5rem;
+}
+
+.persona-description-vertical {
+    width: 100%;
+    text-align: center;
+    margin-bottom: 1rem;
+}

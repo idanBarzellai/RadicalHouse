@@ -135,13 +135,14 @@ export default function EndResults({
 
         const roomRef = dbRef(db, `rooms/${roomCode}`);
         update(roomRef, {
-            stage: "game",
+            stage: "pre-game",
             event: newEvent,
             players: newPlayers,
             spyId,
             votes: {},
             spyGuess: null,
             ready: {},
+            preGameReady: {},
             startTimestamp,
             endTimestamp,
             turnStarterId
