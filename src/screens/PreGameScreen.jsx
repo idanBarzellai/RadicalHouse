@@ -11,6 +11,7 @@ export default function PreGameScreen({ playerId, roomData, roomCode }) {
     const event = roomData.event;
     const ready = roomData.preGameReady?.[playerId];
     const [loading, setLoading] = useState(false);
+    const [showDesc, setShowDesc] = useState(false);
 
     const handleReady = async () => {
         setLoading(true);
@@ -32,23 +33,25 @@ export default function PreGameScreen({ playerId, roomData, roomCode }) {
 
     return (
         <>
-            {isSpy ? (
-                <div className="spy-block">
-                    {personaToShow ? (
-                        <>
-                            <div className="persona-header">
-                                <div className="persona-info">
-                                    <h3 className="persona-name">{personaToShow.name}</h3>
-                                    <div className="persona-occupation">{personaToShow.occupation}</div>
-                                </div>
-                                <img src={personaToShow.image} alt={personaToShow.name} className="persona-image" />
-                            </div>
-                            <div className="persona-description">{personaToShow.description}</div>
-                        </>
-                    ) : (
-                        <div>לא נמצאה דמות</div>
-                    )}
-                    <hr />
+            <div className="persona-block persona-vertical">
+                {isSpy && (
+                    <div className="spy-banner">את/ה המרגל/ית!</div>
+                )}
+                <div className="persona-header persona-header-vertical">
+                    <img src={personaToShow.image} alt={personaToShow.name} className="persona-image" />
+                    <div className="persona-info">
+                        <h3 className="persona-name">{personaToShow.name}</h3>
+                        <div className="persona-occupation">{personaToShow.occupation}</div>
+                        <button className="toggle-desc" onClick={() => setShowDesc(v => !v)}>
+                            {showDesc ? "הסתר תיאור" : "הצג תיאור"}
+                        </button>
+                    </div>
+                </div>
+                {showDesc && (
+                    <div className="persona-description persona-description-vertical">{personaToShow.description}</div>
+                )}
+                <hr />
+                {isSpy ? (
                     <div className="spy-event-list-block">
                         <div className="spy-event-list-title">האירועים האפשריים:</div>
                         <ul className="spy-event-list">
@@ -57,25 +60,14 @@ export default function PreGameScreen({ playerId, roomData, roomCode }) {
                             ))}
                         </ul>
                     </div>
-                </div>
-            ) : (
-                <div className="persona-block persona-vertical">
-                    <div className="persona-header persona-header-vertical">
-                        <img src={personaToShow.image} alt={personaToShow.name} className="persona-image" />
-                        <div className="persona-info">
-                            <h3 className="persona-name">{personaToShow.name}</h3>
-                            <div className="persona-occupation">{personaToShow.occupation}</div>
-                        </div>
-                    </div>
-                    <div className="persona-description persona-description-vertical">{personaToShow.description}</div>
-                    <hr />
+                ) : (
                     <div className="event-block">
                         <div className="event-title">האירוע שלכם:</div>
                         <div className="event-name">{event.title}</div>
                         <img src={event.image} alt={event.title} className="event-image" />
                     </div>
-                </div>
-            )}
+                )}
+            </div>
             <button
                 className="button-rounded ready-btn"
                 onClick={handleReady}

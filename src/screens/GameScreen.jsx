@@ -9,6 +9,7 @@ import SpyGuess from "../components/game/SpyGuess";
 import EndResults from "./EndResults";
 import ExitButton from "../components/ui/ExitButton";
 import "./GameScreen.css";
+import { events } from "../data/data";
 
 // Debug button component
 const DebugButton = ({ onClick }) => (
@@ -38,7 +39,7 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
     const me = roomData.players.find((p) => p.id === playerId) || {};
     const persona = me.persona;
 
-    const [showDesc, setShowDesc] = useState(true);
+    const [showDesc, setShowDesc] = useState(false);
     const [timeLeft, setTimeLeft] = useState(null);
     const [hasVoted, setHasVoted] = useState(false);
     const [hasGuessed, setHasGuessed] = useState(false);
@@ -187,15 +188,41 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
                 <div className="game-timer">{formatTime(timeLeft)}</div>
             )}
 
-            {isSpy
-                ? <SpyView />
-                : <PlayerView
-                    persona={persona}
-                    event={roomData.event}
-                    showDesc={showDesc}
-                    toggleDesc={() => setShowDesc((v) => !v)}
-                />
-            }
+            <div className="persona-block persona-vertical">
+                {isSpy && (
+                    <div className="spy-banner">את/ה המרגל/ית!</div>
+                )}
+                <div className="persona-header persona-header-vertical">
+                    <img src={persona?.image} alt={persona?.name} className="persona-image" />
+                    <div className="persona-info">
+                        <h3 className="persona-name">{persona?.name}</h3>
+                        <div className="persona-occupation">{persona?.occupation}</div>
+                        <button className="toggle-desc" onClick={() => setShowDesc(v => !v)}>
+                            {showDesc ? "הסתר תיאור" : "הצג תיאור"}
+                        </button>
+                    </div>
+                </div>
+                {showDesc && (
+                    <div className="persona-description persona-description-vertical">{persona?.description}</div>
+                )}
+                <hr />
+                {isSpy ? (
+                    <div className="spy-event-list-block">
+                        <div className="spy-event-list-title">האירועים האפשריים:</div>
+                        <ul className="spy-event-list">
+                            {events.map((e, i) => (
+                                <li key={i} className="spy-event-item">{e.title}</li>
+                            ))}
+                        </ul>
+                    </div>
+                ) : (
+                    <div className="event-block">
+                        <div className="event-title">האירוע שלכם:</div>
+                        <div className="event-name">{roomData.event.title}</div>
+                        <img src={roomData.event.image} alt={roomData.event.title} className="event-image" />
+                    </div>
+                )}
+            </div>
 
             <div className="game-players">
                 <h4 className="players-label">שחקנים בחדר:</h4>
@@ -203,8 +230,7 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
                     {roomData.players.map((p) => (
                         <li
                             key={p.id}
-                            className={`player-name ${p.id === roomData.turnStarterId ? "current-turn" : ""
-                                }`}
+                            className={`player-name ${p.id === roomData.turnStarterId ? "current-turn" : ""}`}
                         >
                             {p.name} {p.id === roomData.turnStarterId && "← מתחיל"}
                         </li>

@@ -10,6 +10,7 @@ import LogoHeader from "./components/ui/LogoHeader";
 import './index.css';
 import { leaveRoom } from "./services/roomService";
 import PreGameScreen from "./screens/PreGameScreen";
+import { personas } from "./data/data";
 
 export default function App() {
   const [roomCode, setRoomCode] = useState(null);
@@ -46,11 +47,12 @@ export default function App() {
     }
     const spyId = players[spyIndex]?.id;
 
-    // Update players array to mark the correct spy
+    // Shuffle personas and assign one to each player
+    const shuffledPersonas = [...personas].sort(() => 0.5 - Math.random());
     const updatedPlayers = players.map((p, i) => ({
       ...p,
       isSpy: i === spyIndex,
-      persona: i === spyIndex ? null : p.persona // spy gets no persona
+      persona: shuffledPersonas[i]
     }));
 
     // גם מי יתחיל את הסבב (שומר בקוד שלך)

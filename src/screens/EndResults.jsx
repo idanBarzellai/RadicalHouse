@@ -120,11 +120,12 @@ export default function EndResults({
         const spyIdx = Math.floor(Math.random() * players.length);
         const spyId = players[spyIdx].id;
 
+        // Assign a persona to every player, including the spy
         const newPlayers = players.map((p, i) => ({
             id: p.id,
             name: p.name,
             isSpy: i === spyIdx,
-            persona: i === spyIdx ? null : shuffled[i]
+            persona: shuffled[i]
         }));
         const newEvent = events[Math.floor(Math.random() * events.length)];
 
