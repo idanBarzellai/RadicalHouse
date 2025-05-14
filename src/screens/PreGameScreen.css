@@ -266,3 +266,15 @@
     font-size: 1.1rem;
     margin-top: 0.1rem;
 }
+
+.player-thumb-selected {
+    border: 2px solid #b80000 !important;
+    background: #ffeaea;
+}
+
+.vote-timer {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #b80000;
+    margin-bottom: 0.5rem;
+}

@@ -45,6 +45,7 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
     const [hasGuessed, setHasGuessed] = useState(false);
     const [showEvent, setShowEvent] = useState(false);
     const [markedEvents, setMarkedEvents] = useState([]);
+    const [voteTimeLeft, setVoteTimeLeft] = useState(60);
 
     // keep track of previous timeLeft
     const prevTimeRef = useRef(null);
@@ -116,6 +117,22 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
         }
     }, [roomData.stage, roomData.preGameReady, roomData.players, playerId, roomCode]);
 
+    // Vote timer for vote stage
+    useEffect(() => {
+        if (roomData.stage !== "vote") return;
+        if (voteTimeLeft <= 0) return;
+        const timer = setInterval(() => setVoteTimeLeft(t => t - 1), 1000);
+        return () => clearInterval(timer);
+    }, [roomData.stage, voteTimeLeft]);
+
+    // When vote timer runs out, master advances to results
+    useEffect(() => {
+        if (roomData.stage !== "vote") return;
+        if (voteTimeLeft === 0 && playerId === 1) {
+            update(dbRef(db, `rooms/${roomCode}`), { stage: "results" });
+        }
+    }, [roomData.stage, voteTimeLeft, playerId, roomCode]);
+
     const formatTime = (s) => {
         const m = Math.floor(s / 60).toString().padStart(2, "0");
         const sec = (s % 60).toString().padStart(2, "0");
@@ -160,6 +177,7 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
                 playerId={playerId}
                 onVote={handleVote}
                 hasVoted={hasVoted}
+                voteTimeLeft={voteTimeLeft}
             />
         );
     }
