@@ -44,6 +44,7 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
     const [hasVoted, setHasVoted] = useState(false);
     const [hasGuessed, setHasGuessed] = useState(false);
     const [showEvent, setShowEvent] = useState(false);
+    const [markedEvents, setMarkedEvents] = useState([]);
 
     // keep track of previous timeLeft
     const prevTimeRef = useRef(null);
@@ -210,9 +211,18 @@ export default function GameScreen({ playerId, roomData, roomCode, onExit }) {
                 {isSpy ? (
                     <div className="spy-event-list-block">
                         <div className="spy-event-list-title">האירועים האפשריים:</div>
-                        <ul className="spy-event-list">
+                        <ul className="spy-event-list spy-event-list-center">
                             {events.map((e, i) => (
-                                <li key={i} className="spy-event-item">{e.title}</li>
+                                <li
+                                    key={i}
+                                    className={`spy-event-item${markedEvents.includes(i) ? " spy-event-marked" : ""}`}
+                                    onClick={() => setMarkedEvents(markedEvents.includes(i)
+                                        ? markedEvents.filter(idx => idx !== i)
+                                        : [...markedEvents, i])}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    {e.title}
+                                </li>
                             ))}
                         </ul>
                     </div>
