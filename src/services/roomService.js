@@ -109,7 +109,7 @@ export async function joinRoom(roomCode, playerName) {
         const arr = Array.isArray(raw) ? raw : Object.values(raw);
         const currentPlayers = arr.filter(p => p != null);
 
-        if (currentPlayers.length >= 6) {
+        if (currentPlayers.length >= personas.length) {
             throw new Error("ROOM_FULL");
         }
 

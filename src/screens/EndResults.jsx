@@ -115,6 +115,7 @@ export default function EndResults({
     // 3. התחלת סיבוב נוסף (מאסטר בלבד)
     // =======================================
     const handleStartNext = () => {
+        // Shuffle personas and take only what we need
         const shuffled = [...personas].sort(() => 0.5 - Math.random());
         // Pick a random player index
         const spyIdx = Math.floor(Math.random() * players.length);
@@ -146,7 +147,8 @@ export default function EndResults({
             preGameReady: {},
             startTimestamp,
             endTimestamp,
-            turnStarterId
+            turnStarterId,
+            shuffledPersonas: shuffled // Store the shuffled personas for future use
         });
     };
 
