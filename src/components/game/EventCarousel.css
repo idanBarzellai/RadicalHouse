@@ -20,18 +20,34 @@
     border-radius: 16px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.carousel-image-container {
+    width: 100%;
+    height: 200px;
+    overflow: hidden;
+    position: relative;
+    background-color: #f5f5f5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .carousel-image {
     width: 100%;
-    height: 200px;
-    object-fit: cover;
-    border-top-left-radius: 16px;
-    border-top-right-radius: 16px;
+    height: 100%;
+    object-fit: contain;
+    object-position: center;
+    background-color: #f5f5f5;
 }
 
 .carousel-content {
     padding: 1rem;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .carousel-event-title {
@@ -44,6 +60,7 @@
     font-size: 0.9rem;
     color: #555;
     margin-bottom: 1rem;
+    flex: 1;
 }
 
 .carousel-link-button {
@@ -54,6 +71,7 @@
     font-weight: bold;
     cursor: pointer;
     transition: 0.2s ease;
+    margin-top: auto;
 }
 
 .carousel-link-button:hover {
@@ -62,13 +80,16 @@
 
 .carousel-arrow {
     position: absolute;
-    top: 45%;
+    top: 50%;
+    transform: translateY(-50%);
     font-size: 2rem;
     background: transparent;
     border: none;
     color: #999;
     cursor: pointer;
     transition: color 0.2s ease;
+    padding: 0.5rem;
+    z-index: 2;
 }
 
 .carousel-arrow:hover {
@@ -76,11 +97,9 @@
 }
 
 .carousel-arrow.left {
-    left: 20px;
-    height: 100px;
+    left: 0;
 }
 
 .carousel-arrow.right {
-    right: 20px;
-    height: 100px;
+    right: 0;
 }

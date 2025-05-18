@@ -13,11 +13,13 @@ export default function EventCarousel() {
             <h3 className="carousel-title">אירועים בבית רדיקל:</h3>
 
             <div className="carousel-card">
-                <img
-                    src={current.image}
-                    alt={current.title}
-                    className="carousel-image"
-                />
+                <div className="carousel-image-container">
+                    <img
+                        src={current.image}
+                        alt={current.title}
+                        className="carousel-image"
+                    />
+                </div>
 
                 <div className="carousel-content">
                     <h4 className="carousel-event-title">{current.title}</h4>
@@ -31,8 +33,8 @@ export default function EventCarousel() {
                 </div>
 
                 {/* חצים */}
-                <button className="carousel-arrow left" onClick={prev}>‹</button>
-                <button className="carousel-arrow right" onClick={next}>›</button>
+                <button className="carousel-arrow left" onClick={next}>›</button>
+                <button className="carousel-arrow right" onClick={prev}>‹</button>
             </div>
         </div>
     );

@@ -157,12 +157,28 @@ export async function leaveRoom(roomCode, playerId) {
 
         const { spyIndex, stage } = room;
         const spyId = spyIndex + 1;
-        const activePhases = ["game", "vote", "spyGuess"];
+        const activePhases = ["pre-game", "game", "vote", "spyGuess"];
         const newStage = (playerId === spyId && activePhases.includes(stage))
             ? "results"
             : stage;
 
-        await set(playersRef, updatedPlayers);
+        // If the master (player 1) is leaving, assign a new master
+        if (playerId === 1 && updatedPlayers.length > 0) {
+            // Find the player with the lowest ID to be the new master
+            const newMaster = updatedPlayers.reduce((lowest, current) =>
+                current.id < lowest.id ? current : lowest
+            );
+
+            // Reassign IDs to be sequential starting from 1
+            const reassignedPlayers = updatedPlayers.map((p, index) => ({
+                ...p,
+                id: index + 1
+            }));
+
+            await set(playersRef, reassignedPlayers);
+        } else {
+            await set(playersRef, updatedPlayers);
+        }
 
         if (newStage !== stage) {
             await update(roomRef, {

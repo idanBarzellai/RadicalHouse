@@ -178,12 +178,11 @@ export default function EndResults({
             </ul>
 
             <div style={{ marginTop: "2rem", width: "100%", textAlign: "center" }}>
-                {/* כפתור חזרה לדף הבית (מגריד את המאסטר מה-DB!) */}
+                {/* כפתור חזרה לדף הבית */}
                 <button
                     className="button-rounded"
                     style={{ marginBottom: "1rem", backgroundColor: "#ccc" }}
                     onClick={async () => {
-                        // remove master from the room → triggers everyone else
                         await leaveRoom(roomCode, playerId);
                         onExit();
                     }}

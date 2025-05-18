@@ -1,0 +1,54 @@
+{
+    "rules": {
+        "rooms": {
+            "$roomId": {
+                ".read": true,
+                ".write": "!data.exists() || (data.child('players').hasChild(auth.uid) && newData.child('players').hasChild(auth.uid))",
+                "players": {
+                    "$playerId": {
+                        ".read": true,
+                        ".write": "$playerId === auth.uid || data.child('players').child(auth.uid).child('id').val() === 1",
+                        ".validate": "newData.hasChildren(['name', 'id'])",
+                        "name": {
+                            ".validate": "newData.isString() && newData.val().length > 0"
+                        },
+                        "id": {
+                            ".validate": "newData.isNumber()"
+                        }
+                    }
+                },
+                "stage": {
+                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                },
+                "spyIndex": {
+                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                },
+                "spyId": {
+                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                },
+                "turnStarterId": {
+                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                },
+                "startTimestamp": {
+                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                },
+                "endTimestamp": {
+                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                },
+                "preGameReady": {
+                    "$playerId": {
+                        ".write": "$playerId === auth.uid"
+                    }
+                },
+                "votes": {
+                    "$playerId": {
+                        ".write": "$playerId === auth.uid"
+                    }
+                },
+                "spyGuess": {
+                    ".write": "data.child('spyId').val() === auth.uid"
+                }
+            }
+        }
+    }
+}

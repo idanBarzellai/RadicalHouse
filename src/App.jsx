@@ -16,6 +16,51 @@ export default function App() {
   const [roomCode, setRoomCode] = useState(null);
   const [playerId, setPlayerId] = useState(null);
   const [roomData, setRoomData] = useState(null);
+  const [isVisible, setIsVisible] = useState(true);
+
+  // Handle visibility change (minimize/switch tab)
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsVisible(document.visibilityState === 'visible');
+    };
+
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    return () => {
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+    };
+  }, []);
+
+  // Handle tab closing
+  useEffect(() => {
+    const handleBeforeUnload = (e) => {
+      if (roomCode && playerId) {
+        // This will show a confirmation dialog when trying to close the tab
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [roomCode, playerId]);
+
+  // Set up Firebase disconnect handler
+  useEffect(() => {
+    if (roomCode && playerId) {
+      const roomRef = dbRef(db, `rooms/${roomCode}`);
+      const playerRef = dbRef(db, `rooms/${roomCode}/players/${playerId}`);
+
+      // Set up disconnect handler
+      onDisconnect(playerRef).remove();
+
+      // Clean up when component unmounts
+      return () => {
+        onDisconnect(playerRef).cancel();
+      };
+    }
+  }, [roomCode, playerId]);
 
   const handleExit = async () => {
     if (roomCode && playerId) {
