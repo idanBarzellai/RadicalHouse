@@ -14,6 +14,14 @@
                         },
                         "id": {
                             ".validate": "newData.isNumber()"
+                        },
+                        "disconnected": {
+                            ".write": "$playerId === auth.uid || data.child('players').child(auth.uid).child('id').val() === 1",
+                            ".validate": "newData.isBoolean()"
+                        },
+                        "lastSeen": {
+                            ".write": "$playerId === auth.uid || data.child('players').child(auth.uid).child('id').val() === 1",
+                            ".validate": "newData.isNumber()"
                         }
                     }
                 },

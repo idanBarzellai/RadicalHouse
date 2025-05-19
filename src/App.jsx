@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { update, ref as dbRef, onValue, onDisconnect } from "firebase/database";
+import { update, ref as dbRef, onValue, onDisconnect, serverTimestamp } from "firebase/database";
 import { db } from "./services/firebase";
 import LobbyScreen from "./screens/LobbyScreen";
 import GameScreen from "./screens/GameScreen";
@@ -12,6 +12,8 @@ import { leaveRoom } from "./services/roomService";
 import PreGameScreen from "./screens/PreGameScreen";
 import { personas } from "./data/data";
 
+const DISCONNECT_GRACE_PERIOD = 30000; // 30 seconds grace period
+
 export default function App() {
   const [roomCode, setRoomCode] = useState(null);
   const [playerId, setPlayerId] = useState(null);
@@ -22,13 +24,29 @@ export default function App() {
   useEffect(() => {
     const handleVisibilityChange = () => {
       setIsVisible(document.visibilityState === 'visible');
+      if (roomCode && playerId) {
+        const playerRef = dbRef(db, `rooms/${roomCode}/players/${playerId}`);
+        if (document.visibilityState === 'visible') {
+          // Player is back, update lastSeen and clear disconnected flag
+          update(playerRef, {
+            disconnected: false,
+            lastSeen: serverTimestamp()
+          });
+        } else {
+          // Player is away, mark as disconnected
+          update(playerRef, {
+            disconnected: true,
+            lastSeen: serverTimestamp()
+          });
+        }
+      }
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, []);
+  }, [roomCode, playerId]);
 
   // Handle tab closing
   useEffect(() => {
@@ -49,11 +67,13 @@ export default function App() {
   // Set up Firebase disconnect handler
   useEffect(() => {
     if (roomCode && playerId) {
-      const roomRef = dbRef(db, `rooms/${roomCode}`);
       const playerRef = dbRef(db, `rooms/${roomCode}/players/${playerId}`);
 
-      // Set up disconnect handler
-      onDisconnect(playerRef).remove();
+      // Instead of removing the player, mark them as disconnected
+      onDisconnect(playerRef).update({
+        disconnected: true,
+        lastSeen: serverTimestamp()
+      });
 
       // Clean up when component unmounts
       return () => {
@@ -61,6 +81,25 @@ export default function App() {
       };
     }
   }, [roomCode, playerId]);
+
+  // Check for disconnected players and remove them after grace period
+  useEffect(() => {
+    if (!roomData?.players) return;
+
+    const now = Date.now();
+    const disconnectedPlayers = roomData.players.filter(p =>
+      p.disconnected && (now - p.lastSeen) > DISCONNECT_GRACE_PERIOD
+    );
+
+    if (disconnectedPlayers.length > 0 && playerId === 1) {
+      // Room master removes players who have been disconnected for too long
+      const updates = {};
+      disconnectedPlayers.forEach(p => {
+        updates[`rooms/${roomCode}/players/${p.id}`] = null;
+      });
+      update(dbRef(db), updates);
+    }
+  }, [roomData, roomCode, playerId]);
 
   const handleExit = async () => {
     if (roomCode && playerId) {
