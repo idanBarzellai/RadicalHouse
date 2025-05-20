@@ -40,6 +40,7 @@ export default function SplashScreen({ onJoin }) {
             const { playerId } = await joinRoom(joinCode, playerName);
             onJoin({ roomCode: joinCode, playerId });
         } catch (err) {
+            console.error("Error joining room:", err);
             if (err.message === "ROOM_FULL") {
                 setWarning("החדר מלא, לא ניתן להצטרף עוד.");
             } else if (err.message === "GAME_IN_PROGRESS") {
@@ -50,7 +51,6 @@ export default function SplashScreen({ onJoin }) {
                 setWarning("החדר פג תוקף. נא ליצור חדר חדש.");
             } else {
                 setWarning("שגיאה בכניסה לחדר. נסה שוב.");
-                console.error(err);
             }
         } finally {
             setIsJoining(false);

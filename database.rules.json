@@ -3,11 +3,12 @@
         "rooms": {
             "$roomId": {
                 ".read": true,
-                ".write": "!data.exists() || (data.child('players').hasChild(auth.uid) && newData.child('players').hasChild(auth.uid))",
+                ".write": true,
                 "players": {
+                    ".write": true,
                     "$playerId": {
                         ".read": true,
-                        ".write": "$playerId === auth.uid || data.child('players').child(auth.uid).child('id').val() === 1",
+                        ".write": true,
                         ".validate": "newData.hasChildren(['name', 'id'])",
                         "name": {
                             ".validate": "newData.isString() && newData.val().length > 0"
@@ -16,45 +17,55 @@
                             ".validate": "newData.isNumber()"
                         },
                         "disconnected": {
-                            ".write": "$playerId === auth.uid || data.child('players').child(auth.uid).child('id').val() === 1",
                             ".validate": "newData.isBoolean()"
                         },
                         "lastSeen": {
-                            ".write": "$playerId === auth.uid || data.child('players').child(auth.uid).child('id').val() === 1",
                             ".validate": "newData.isNumber()"
                         }
                     }
                 },
                 "stage": {
-                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                    ".write": true
                 },
                 "spyIndex": {
-                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                    ".write": true
                 },
                 "spyId": {
-                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                    ".write": true
                 },
                 "turnStarterId": {
-                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                    ".write": true
                 },
                 "startTimestamp": {
-                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                    ".write": true
                 },
                 "endTimestamp": {
-                    ".write": "data.child('players').child(auth.uid).child('id').val() === 1"
+                    ".write": true
                 },
                 "preGameReady": {
                     "$playerId": {
-                        ".write": "$playerId === auth.uid"
+                        ".write": true
                     }
                 },
                 "votes": {
                     "$playerId": {
-                        ".write": "$playerId === auth.uid"
+                        ".write": true
                     }
                 },
                 "spyGuess": {
-                    ".write": "data.child('spyId').val() === auth.uid"
+                    ".write": true
+                },
+                "shuffledPersonas": {
+                    ".write": true
+                },
+                "event": {
+                    ".write": true
+                },
+                "createdAt": {
+                    ".write": true
+                },
+                "lastActivity": {
+                    ".write": true
                 }
             }
         }

@@ -14,11 +14,12 @@
 .carousel-card {
     position: relative;
     width: 100%;
-    max-width: 300px;
+    max-width: 320px;
+    min-height: 420px;
     margin: auto;
     overflow: hidden;
-    border-radius: 16px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border-radius: 24px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.10);
     background-color: #fff;
     display: flex;
     flex-direction: column;
@@ -48,6 +49,8 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    min-height: 180px;
+    justify-content: flex-start;
 }
 
 .carousel-event-title {
@@ -64,42 +67,62 @@
 }
 
 .carousel-link-button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 20px;
-    background-color: #e8e2dc;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.2s ease;
     margin-top: auto;
+    width: 100%;
+    max-width: 240px;
+    padding: 16px 0;
+    border: none;
+    border-radius: 32px;
+    background: var(--primary-color, #D1A8FF);
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s, opacity 0.2s;
+    display: block;
+    box-shadow: none;
+    text-align: center;
 }
 
 .carousel-link-button:hover {
-    background-color: #d6d1cb;
+    background: #c09be0;
 }
 
 .carousel-arrow {
     position: absolute;
     top: 50%;
     transform: translateY(-50%);
-    font-size: 2rem;
-    background: transparent;
-    border: none;
-    color: #999;
+    font-size: 2.2rem;
+    background: #fff9f6;
+    border: 2px solid #D1A8FF;
+    color: #D1A8FF;
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
-    transition: color 0.2s ease;
-    padding: 0.5rem;
+    transition: background 0.2s, color 0.2s, border 0.2s;
     z-index: 2;
+    box-shadow: 0 2px 8px rgba(209, 168, 255, 0.08);
 }
 
 .carousel-arrow:hover {
-    color: #666;
+    background: #D1A8FF;
+    color: #fff;
+    border: 2px solid #D1A8FF;
 }
 
 .carousel-arrow.left {
-    left: 0;
+    left: -22px;
 }
 
 .carousel-arrow.right {
-    right: 0;
+    right: -22px;
+}
+
+.carousel-arrow:active {
+    transform: translateY(-50%);
+    opacity: 0.9;
 }

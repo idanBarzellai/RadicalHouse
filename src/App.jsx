@@ -226,39 +226,48 @@ export default function App() {
   }, [roomData, playerId, roomCode]);
 
   return (
-    <div className="page-container">
-      <LogoHeader />
-      <HelpButton />
-      {(!roomCode || !roomData) ? (
-        <SplashScreen onJoin={({ roomCode, playerId }) => {
-          setRoomCode(roomCode);
-          setPlayerId(playerId);
-        }} />
-      ) : <>
-        <ExitButton onExit={handleExit} />
-        {roomData.stage === "lobby" ? (
-          <LobbyScreen
-            roomCode={roomCode}
-            players={roomData.players}
-            playerId={playerId}
-            onStartGame={startGameForAll}
-            onExit={handleExit}
-          />
-        ) : roomData.stage === "pre-game" ? (
-          <PreGameScreen
-            playerId={playerId}
-            roomData={roomData}
-            roomCode={roomCode}
-          />
+    <div className="page-container no-select">
+      <header className="header">
+        <LogoHeader />
+        <div className="header-actions">
+          <HelpButton />
+          {roomCode && <ExitButton onExit={handleExit} />}
+        </div>
+      </header>
+
+      <main className="main-content">
+        {(!roomCode || !roomData) ? (
+          <SplashScreen onJoin={({ roomCode, playerId }) => {
+            setRoomCode(roomCode);
+            setPlayerId(playerId);
+          }} />
         ) : (
-          <GameScreen
-            playerId={playerId}
-            roomData={roomData}
-            roomCode={roomCode}
-            onExit={handleExit}
-          />
+          <>
+            {roomData.stage === "lobby" ? (
+              <LobbyScreen
+                roomCode={roomCode}
+                players={roomData.players}
+                playerId={playerId}
+                onStartGame={startGameForAll}
+                onExit={handleExit}
+              />
+            ) : roomData.stage === "pre-game" ? (
+              <PreGameScreen
+                playerId={playerId}
+                roomData={roomData}
+                roomCode={roomCode}
+              />
+            ) : (
+              <GameScreen
+                playerId={playerId}
+                roomData={roomData}
+                roomCode={roomCode}
+                onExit={handleExit}
+              />
+            )}
+          </>
         )}
-      </>}
+      </main>
     </div>
   );
 }

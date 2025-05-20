@@ -1,102 +1,241 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --background-color: #FFF9F6;
+  --primary-color: #D1A8FF;
+  --secondary-color: #fff;
+  --secondary-border: #222;
+  --accent-color: #EFFF6B;
+  --text-color: #222;
+  --error-color: #ff4444;
+  --success-color: #00C851;
+  --warning-color: #ffbb33;
+  --info-color: #33b5e5;
+  --border-radius: 32px;
+  --spacing-unit: 16px;
+}
+
 html,
-body,
+body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: var(--background-color);
+  color: var(--text-color);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
 #root {
   height: 100%;
-  margin: 0;
-}
-
-/* מרכזים את התוכן במשולש: body > #root > page-container */
-#root {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-/* גוף העמוד ממורכז אנכית ואופקית */
-body {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin: 0;
-  min-width: 320px;
-  background-color: #ffffff;
-}
-
-/* קופסת התוכן שלך */
-.page-container {
-  width: 100vw;
-  max-width: 400px;
-  height: 90vw;
-  max-height: 700px;
-  min-height: 500px;
-  min-width: 320px;
-  margin: 2rem auto;
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  align-items: center;
-  background-color: #f6f1ec;
-  padding: 60px 2rem 2rem 2rem;
-  /* top padding for logo/buttons */
-  border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
-  color: #222;
-  font-family: inherit;
-  text-align: center;
-  position: relative;
 }
 
-@media (max-width: 500px) {
-  .page-container {
-    width: 98vw;
-    height: 98vw;
-    max-width: 98vw;
-    max-height: 98vw;
-    min-width: 0;
-    min-height: 0;
-    padding: 50px 1vw 1vw 1vw;
+.page-container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  background: var(--background-color);
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 24px;
+  background: var(--background-color);
+}
+
+.header-actions {
+  display: flex;
+  gap: 16px;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 100px 24px 24px 24px;
+  height: 100%;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Safe area insets for modern mobile browsers */
+@supports (padding: max(0px)) {
+  .header {
+    padding-top: max(24px, env(safe-area-inset-top));
+    padding-left: max(24px, env(safe-area-inset-left));
+    padding-right: max(24px, env(safe-area-inset-right));
+  }
+
+  .main-content {
+    padding-bottom: max(24px, env(safe-area-inset-bottom));
   }
 }
 
+/* Prevent text selection */
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Prevent pull-to-refresh on mobile */
+body {
+  overscroll-behavior-y: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hide scrollbars but keep functionality */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Improve touch targets on mobile */
+button,
+[role="button"],
+input,
+select {
+  min-height: 48px;
+  min-width: 48px;
+}
+
+/* Improve text readability */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.5;
+  margin-bottom: var(--spacing-unit);
+}
+
+/* Add some spacing between elements */
+*+* {
+  margin-top: var(--spacing-unit);
+}
+
+/* Improve form elements on mobile */
+input,
+select,
+textarea {
+  font-size: 16px;
+  /* Prevents iOS zoom on focus */
+  padding: 16px;
+  border-radius: var(--border-radius);
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: white;
+  color: var(--text-color);
+  width: 100%;
+}
+
+/* Improve button styles */
+button {
+  background: var(--primary-color);
+  color: #fff;
+  border: none;
+  border-radius: var(--border-radius);
+  font-weight: bold;
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
+  padding: 16px 32px;
+  font-size: 1.1rem;
+  transition: transform 0.2s, opacity 0.2s;
+}
+
+button.secondary {
+  background: var(--secondary-color);
+  color: var(--text-color);
+  border: 2px solid var(--secondary-border);
+  border-radius: var(--border-radius);
+}
+
+button:active {
+  transform: scale(0.98);
+  opacity: 0.9;
+}
+
+/* Add loading state styles */
+.loading {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+/* Add error state styles */
+.error {
+  color: var(--error-color);
+  background: rgba(255, 68, 68, 0.1);
+  padding: var(--spacing-unit);
+  border-radius: var(--border-radius);
+  margin: var(--spacing-unit) 0;
+}
+
+/* Screen-specific styles */
 .screen-heading {
   text-align: center;
-  color: #333;
-  margin-bottom: 2rem;
-  font-size: 1rem;
+  color: var(--text-color);
+  margin-bottom: 32px;
+  font-size: 1.5rem;
   line-height: 1.6;
 }
 
-.screen-heading p {
-  margin: 0.5rem 0;
-}
-
 .screen-sub {
-  font-size: 0.9rem;
-  margin-top: 1rem;
+  font-size: 1.1rem;
+  margin-top: 24px;
+  color: rgba(0, 0, 0, 0.7);
 }
 
-
-/* כפתורים */
-.button-rounded {
+/* Remove all the old container styles */
+.page-container {
   width: 100%;
-  padding: 0.9rem;
-  border-radius: 25px;
-  font-size: 1rem;
-  font-weight: bold;
-  cursor: pointer;
-  background-color: #e8e2dc;
-  border: none;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  min-height: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  background-color: var(--background-color);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.label-accent {
+  background: var(--accent-color);
   color: #222;
-  margin-bottom: 1rem;
-  transition: background 0.2s ease;
-}
-
-.button-rounded:hover {
-  background-color: #d6d1cb;
-}
-
-.button-rounded[disabled] {
-  background-color: #ddd;
-  color: #888;
-  border-color: #ccc;
+  border-radius: 16px;
+  padding: 0.2em 1em;
+  font-weight: bold;
+  display: inline-block;
 }
